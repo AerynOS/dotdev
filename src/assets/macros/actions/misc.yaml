@@ -1,0 +1,61 @@
+actions:
+
+    - install_bin:
+        description: Install files to %(bindir)
+        example: |
+            %install_bin nano
+        command: |
+            install -Dm00755 -t %(installroot)/%(bindir)
+
+    - install_dir:
+        description: Create a new empty directory with the default permissions
+        example: |
+            %install_dir %(installroot)%(datadir)/pkgname/docs
+        command: |
+            install -dm00755
+
+    - install_exe:
+        description: Macro to install a file with default executable permissions
+        command: |
+            install -Dm00755
+
+    - install_file:
+        description: Macro to install a file without executable permissions
+        example: |
+            %install_file %(pkgdir)/helper.file %(installroot)%(datadir)/pkgname/pkgfile
+        command: |
+            install -Dm00644
+
+    - patch:
+        description: Patch the upstream sources using an input patch file.
+        example: |
+            %patch %(pkgdir)/${file}
+
+            # If you need to override -p#, add it after ${file}
+            %patch %(pkgdir)/some.patch -p3
+        command: |
+            patch -f -p1 -i
+        dependencies:
+            - patch
+
+    - tmpfiles:
+        description: Create a tmpfiles.d file for the package with given content
+        command: |
+            create_tmpfiles(){
+                if [ -z "%(libsuffix)" ]; then
+                    mkdir -p %(installroot)/%(tmpfilesdir)
+                    echo "$@" >> %(installroot)/%(tmpfilesdir)/%(name).conf
+                fi
+            }
+            create_tmpfiles
+
+    - sysusers:
+        description: Create a sysusers.d file for the package with given content
+        command: |
+            create_sysusers(){
+                if [ -z "%(libsuffix)" ]; then
+                    mkdir -p %(installroot)/%(sysusersdir)
+                    echo "$@" >> %(installroot)/%(sysusersdir)/%(name).conf
+                fi
+            }
+            create_sysusers

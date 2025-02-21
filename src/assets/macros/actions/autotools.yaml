@@ -1,0 +1,62 @@
+actions:
+
+    - configure:
+        description: Perform ./configure with the default options
+        command: |
+            test -x ./configure || ( echo "%%configure: The ./configure script could not be found" ; exit 1 )
+            ./configure %(options_configure)
+        dependencies:
+            - autoconf
+            - automake
+
+    # TIP: Add V=1 VERBOSE=1 after '%make' in the recipe if you need a more verbose build
+    - make:
+        description: Perform a make
+        command: |
+            make -j "%(jobs)"
+        dependencies:
+            - make
+
+    - make_install:
+        description: Install results of build to the destination directory
+        command: |
+            %make install DESTDIR="%(installroot)"
+        dependencies:
+            - make
+
+    - reconfigure:
+        description: Re autotools-configure a project without an autogen.sh script
+        command: |
+            autoreconf -vfi || ( echo "%%reconfigure: Failed to run autoreconf"; exit 1 )
+            %configure
+        dependencies:
+            - autoconf
+            - automake
+
+    - autogen:
+        description: Run autogen.sh script, attempting to only configure once
+        command: |
+            NOCONFIGURE="noconfigure"; export NOCONFIGURE
+            sh ./autogen.sh %(options_configure)
+            ./configure %(options_configure)
+        dependencies:
+            - autoconf
+            - automake
+
+definitions:
+
+    # Default configuration options as passed to configure
+    - options_configure: |
+        --prefix="%(prefix)" \
+        --bindir="%(bindir)" \
+        --sbindir="%(sbindir)" \
+        --build="%(build_platform)" \
+        --host="%(host_platform)" \
+        --libdir="%(libdir)" \
+        --mandir="%(mandir)" \
+        --infodir="%(infodir)" \
+        --datadir="%(datadir)" \
+        --sysconfdir="%(sysconfdir)" \
+        --localstatedir="%(localstatedir)" \
+        --sharedstatedir="%(sharedstatedir)" \
+        --libexecdir="%(libexecdir)"

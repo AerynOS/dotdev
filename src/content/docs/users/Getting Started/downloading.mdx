@@ -1,0 +1,68 @@
+---
+title: Downloading Serpent OS
+lastUpdated: 2024-09-10T23:36:23+08:00
+description: Downloading the Serpent OS ISO file and verifying the checksums
+sidebar:
+  order: 20
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Downloading the ISO
+
+1. Visit the [Serpent OS download page](https://download.serpentos.com).
+2. Look for the latest release available for download, the official ISO files are named `serpentos-<version>.iso`.
+
+  <Aside>
+  Their may be multiple versions available with different desktop environments donoted by `serpentos-<version>-<desktop>.iso` where `<desktop>` is the desktop environment.
+  </Aside>
+
+3. Click on the download link to start downloading the ISO file and assiocated checksums donated by `serpentos-<version>.iso.sha256`.
+
+Once the download is complete, you can proceed with creating a bootable USB drive or burning the ISO to a DVD to install Serpent OS on your machine.
+
+## Verifying the Checksums
+
+Before creating a bootable USB drive or burning the ISO to a DVD, it's important to verify the checksums to ensure the integrity of the downloaded ISO file.
+
+<Aside type="caution">
+  Using the ISO file without verifying the checksums can lead to boot failures, installation issues, and potential security risks.
+</Aside>
+
+### Linux
+
+1. Open a terminal window and navigate to the directory where the ISO file is located along with the checksums.
+
+```bash
+cd ~/Downloads
+```
+
+2. Run the following command to verify the checksums:
+
+```bash
+
+sha256sum -c <checksum_file>
+```
+You should see a message indicating that the checksums match if the ISO file is valid.
+
+```bash
+serpent-os.iso: OK
+```
+
+If the checksums do not match, download the ISO file again and repeat the verification process.
+
+### Windows
+
+1. Open a Command Prompt window and navigate to the directory where the ISO file is located along with the checksums.
+
+```cmd
+cd C:\Users\<username>\Downloads
+```
+
+2. Run the following command to verify the checksums:
+
+```cmd
+certutil -hashfile serpent-os-<version>.iso SHA256
+```
+
+This will give you the checksum of the file, compare this to the checksum found inside the checksum file.
