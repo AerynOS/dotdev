@@ -33,11 +33,11 @@ The packages in this buildroot are resolved from one or more moss `stone.index` 
 descending priority, such that the highest priority repository "wins" when package providers are
 resolved.
 
-The lowest priority repository will typically be the official Serpent OS upstream package
+The lowest priority repository will typically be the official AerynOS upstream package
 repository.
 
 If higher priority repositories are added, packages from these will in turn override the packages
-available in the official Serpent OS upstream package repository.
+available in the official AerynOS upstream package repository.
 
 The next section deals with how to create and register a higher priority local moss-format
 repository, which is colloquially referred to as a "local repo".
@@ -50,7 +50,7 @@ the following commands:
 
 ```bash
 # create a new tab or open a new terminal
-gotoserpentrepo
+gotoaerynosrepo
 just create-local
 just index-local
 ```
@@ -68,19 +68,19 @@ Boulder will need to have its list of "build profiles" be updated before it will
 boulder profile list
 # output
 default-x86_64:
-  - volatile = https://packages.serpentos.com/volatile/x86_64/stone.index [0]
+  - volatile = https://packages.aerynos.com/volatile/x86_64/stone.index [0]
 
 # add new local-x86_64 build profile
 boulder profile add \
-  --repo name=volatile,uri=https://packages.serpentos.com/volatile/x86_64/stone.index,priority=0 \
+  --repo name=volatile,uri=https://packages.aerynos.com/volatile/x86_64/stone.index,priority=0 \
   --repo name=local,uri=file://${HOME}/.cache/local_repo/x86_64/stone.index,priority=100 \
   local-x86_64
 boulder profile list
 # output
 default-x86_64:
- - volatile = https://packages.serpentos.com/volatile/x86_64/stone.index [0]
+ - volatile = https://packages.aerynos.com/volatile/x86_64/stone.index [0]
 local-x86_64:
- - volatile = https://packages.serpentos.com/volatile/x86_64/stone.index [0]
+ - volatile = https://packages.aerynos.com/volatile/x86_64/stone.index [0]
  - local = file:///home/ermo/.cache/local_repo/x86_64/stone.index [100]
 ```
 
@@ -98,7 +98,7 @@ local-x86_64:
       active: true
     volatile:
       description: ''
-      uri: https://packages.serpentos.com/volatile/x86_64/stone.index
+      uri: https://packages.aerynos.com/volatile/x86_64/stone.index
       priority: 0
       active: true
 ```
@@ -112,14 +112,14 @@ Listing and adding moss-format repositories containing stone.index files is done
 ```bash
 moss repo list
 # output
- - unstable = https://dev.serpentos.com/volatile/x86_64/stone.index [0]
+ - unstable = https://aerynos.dev/volatile/x86_64/stone.index [0]
 # add repositories
-sudo moss repo add volatile https://packages.serpentos.com/volatile/x86_64/stone.index -p 10
+sudo moss repo add volatile https://packages.aerynos.com/volatile/x86_64/stone.index -p 10
 sudo moss repo add local file://${HOME}/.cache/local_repo/x86_64/stone.index -p 100
 moss repo list
 # output
- - unstable = https://dev.serpentos.com/volatile/x86_64/stone.index [0]
- - volatile = https://packages.serpentos.com/volatile/x86_64/stone.index [10]
+ - unstable = https://aerynos.dev/volatile/x86_64/stone.index [0]
+ - volatile = https://packages.aerynos.com/volatile/x86_64/stone.index [10]
  - local = file:///home/ermo/.cache/local_repo/x86_64/stone.index [100]
 ```
 
@@ -128,13 +128,13 @@ moss repo list
 
 In the above priority tower, each moss-format package would first get resolved via the `local`
 repository (priority 100), then from the `volatile` repository (priority 10), and finally from the
-`unstable` repository (priority 0), the latter of which is the official upstream Serpent OS
+`unstable` repository (priority 0), the latter of which is the official upstream AerynOS
 moss-format `.stone` package repository.
 
 
 #### Disabling moss-format repositories
 
-Users of Serpent OS should generally _not_ have the `volatile` repository be enabled, because this
+Users of AerynOS should generally _not_ have the `volatile` repository be enabled, because this
 repository is where new `.stone` packages land right after being built, which means the repository
 can potentially be in an undefined and volatile state when building large build queues (hence the
 name).
@@ -147,8 +147,8 @@ sudo moss repo disable volatile
 sudo moss repo disable local
 moss repo list
 # output
- - unstable = https://dev.serpentos.com/volatile/x86_64/stone.index [0]
- - volatile = https://packages.serpentos.com/volatile/x86_64/stone.index [10] (disabled)
+ - unstable = https://aerynos.dev/volatile/x86_64/stone.index [0]
+ - volatile = https://packages.aerynos.com/volatile/x86_64/stone.index [10] (disabled)
  - local = file:///home/ermo/.cache/local_repo/x86_64/stone.index [100] (disabled)
 ```
 
@@ -167,8 +167,8 @@ sudo moss repo enable volatile
 sudo moss repo enable local
 moss repo list
 # output
- - unstable = https://dev.serpentos.com/volatile/x86_64/stone.index [0]
- - volatile = https://packages.serpentos.com/volatile/x86_64/stone.index [10]
+ - unstable = https://aerynos.dev/volatile/x86_64/stone.index [0]
+ - volatile = https://packages.aerynos.com/volatile/x86_64/stone.index [10]
  - local = file:///home/ermo/.cache/local_repo/x86_64/stone.index [100]
 ```
 
@@ -178,8 +178,8 @@ moss repo list
 To actually build a recipe, it is recommended that new packagers start out by building `nano`.
 
 ```bash
-# Go into the root of the serpent recipe directory 
-gotoserpentrepo
+# Go into the root of the AerynOS recipe directory 
+gotoaerynosrepo
 # change to the directory holding the nano recipe
 chpkg nano
 # bump the release number in the nano recipe
@@ -196,7 +196,7 @@ just mv-local
 just ls-local
 ```
 
-Note that the basic packaging workflow in Serpent OS assumes that you are using a local repository.
+Note that the basic packaging workflow in AerynOS assumes that you are using a local repository.
 
 If you are building multiple package recipes, you will need to `just build` and `just mv-local`
 for each package recipe sequentially.
@@ -222,7 +222,7 @@ Often, it will be prudent to clean out the local repository after the associated
 accepted upstream.
 
 ```bash
-gotoserpentrepo
+gotoaerynosrepo
 just clean-local
 sudo moss repo disable volatile
 sudo moss repo disable local
@@ -238,7 +238,7 @@ repository in the previous system state.
 ## Ending notes
 
 If you have made it this far, congratulations! You should now understand the basic workflow of
-packaging and managing repositories with Serpent OS.
+packaging and managing repositories with AerynOS.
 
 Tip: execute `just -l` to see a list of supported `just` 'recipes', which are common actions that
-     have been automated by the Serpent OS developers.
+     have been automated by the AerynOS developers.

@@ -1,7 +1,7 @@
 ---
 title: Creating the Live Environment
 lastUpdated: 2024-09-10T23:43:21+08:00
-description: Creating a live environment to boot into and run the Serpent OS installer
+description: Creating a live environment to boot into and run the AerynOS installer
 sidebar:
   order: 30
 ---
@@ -18,7 +18,7 @@ Creating a bootable USB drive will erase all data on the USB drive. Make sure to
 Ensure the USB drive is properly ejected after flashing the ISO to avoid data corruption.
 </Aside>
 
-You'll need your USB drive and the ISO file downloaded from the [Serpent OS download page](https://download.serpentos.com).
+You'll need your USB drive and the ISO file downloaded from the [AerynOS download page](https://download.AerynOS.com).
 
 ### Linux
 
@@ -52,7 +52,7 @@ This may take some time to complete depending on the size of the ISO file and th
 </Aside>
 
 ```bash
-sudo dd if=serpentos-<version>.iso of=/dev/sdX bs=4M conv=fsync oflag=direct status=progress
+sudo dd if=aerynos-<version>.iso of=/dev/sdX bs=4M conv=fsync oflag=direct status=progress
 ```
 
 This command will write the ISO file to the USB drive and you'll see a progress indicator as it completes.

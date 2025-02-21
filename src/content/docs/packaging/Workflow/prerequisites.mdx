@@ -1,18 +1,18 @@
 ---
 title: 'Prerequisites'
 lastUpdated: 2025-01-01T18:28:22+01:00
-description: "Prerequisites for building packages on Serpent OS"
+description: "Prerequisites for building packages on Aeryn OS"
 sidebar:
   order: 10
 ---
 
-To set up a Serpent OS system to be able to build package recipes, a few prerequisites need to be
+To set up a AerynOS system to be able to build package recipes, a few prerequisites need to be
 installed, and a new directory for storing local build artifacts needs to be set up.
 
 ## Installing the `build-essential` package
 
 We maintain a `build-essential` metapackage that should contain the basics for getting started
-with packaging on Serpent OS.
+with packaging on AerynOS.
 
 ```bash
 sudo moss sync -u
@@ -20,17 +20,17 @@ sudo moss it build-essential
 ```
 
 
-## Activating the Serpent OS helper scripts
+## Activating the AerynOS helper scripts
 
 The easiest way to create a local repository is to use the helper script distributed with the
-Serpent OS recipe repository in the `tools/` directory.
+AerynOS recipe repository in the `tools/` directory.
 
 Start by cloning the recipes/ git repository:
 
 ```bash
-mkdir -pv repos/serpent-os/
-pushd repos/serpent-os
-git clone https://github.com/serpent-os/recipes
+mkdir -pv repos/aerynos/
+pushd repos/aerynos
+git clone https://github.com/AerynOS/recipes
 ```
 
 After the recipes/ git repository has been cloned, symlink helpers.bash into `~/.bashrcd.d/`:
@@ -38,17 +38,17 @@ After the recipes/ git repository has been cloned, symlink helpers.bash into `~/
 ```bash
 popd
 mkdir -pv ~/.bashrc.d/
-ln -sv ~/repos/serpent-os/recipes/tools/helpers.bash ~/.bashrc.d/90-serpent-helpers.bash
+ln -sv ~/repos/aerynos/recipes/tools/helpers.bash ~/.bashrc.d/90-aerynos-helpers.bash
 ```
 
 Finally, execute the following in a new terminal tab:
 
 ```bash
 cd ~
-gotoserpentrepo
+gotoaerynosrepo
 ```
 
-If the helpers script has been correctly loaded, the `gotoserpentrepo` command should switch to
+If the helpers script has been correctly loaded, the `gotoaerynosrepo` command should switch to
 the directory containing the recipes/ git repository clone.
 
 
@@ -59,7 +59,7 @@ The `just` command runner should have been installed as part of `build-essential
 Run the following:
 
 ```bash
-gotoserpentrepo
+gotoaerynosrepo
 just init
 ```
 
