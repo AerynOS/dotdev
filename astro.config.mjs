@@ -6,10 +6,17 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'SerpendOS Docs',
+      logo: {
+        src: '@/images/logo.svg',
+        replacesTitle: false,
+      },
+			title: 'AerynOS Docs',
 			social: {
-				github: 'https://github.com/serpent-os/',
+				github: 'https://github.com/AerynOS/dotdev',
 			},
+      customCss: [
+        '@/styles/global.css',
+      ],
 			sidebar: [
 				{
 					label: 'Users',

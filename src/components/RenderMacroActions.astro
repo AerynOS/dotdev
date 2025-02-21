@@ -3,10 +3,16 @@ import yaml from 'yaml';
 import fs from 'node:fs';
 
 // Define props
-const { group } = Astro.props;
+const { group, description, example } = Astro.props;
 const contents = fs.readFileSync(`src/assets/macros/actions/${group}.yaml`, 'utf8');
 // Parse the YAML content
 const data = yaml.parse(contents) as any;
+
+interface Props {
+  group: string;
+  description: string;
+  example ?: string;
+}
 ---
 
 {data.actions.map(action=>{
@@ -14,11 +20,11 @@ const data = yaml.parse(contents) as any;
     return (
         <div>
           <h2>%{name}</h2>
-          <div>{props.description}</div>
-          {props.example && (
+          <div>{description}</div>
+          {example && (
             <div>
               <h3>Example</h3>
-              <pre>{props.example}</pre>
+              <pre>{example}</pre>
             </div>
           )}
       </div>
