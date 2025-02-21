@@ -1,0 +1,52 @@
+actions:
+
+    - cmake:
+        description: Perform cmake with the default options in a subdirectory
+        command: |
+            cmake %(options_cmake)
+        dependencies:
+            - cmake
+
+    - cmake_unity:
+        description: Perform cmake with unity build enabled
+        command: |
+            cmake -DCMAKE_UNITY_BUILD=ON %(options_cmake)
+        dependencies:
+            - cmake
+
+    - cmake_build:
+        description: Build the cmake project
+        command: |
+            ninja -v -j "%(jobs)" -C "%(builddir)"
+        dependencies:
+            - ninja
+
+    - cmake_install:
+        description: Install results of the build to the destination directory
+        command: |
+            DESTDIR="%(installroot)" ninja install -v -j "%(jobs)" -C "%(builddir)"
+        dependencies:
+            - ninja
+
+    - cmake_test:
+        description: Run testsuite with ctest
+        command: |
+            ninja test -v -j "%(jobs)" -C "%(builddir)"
+        dependencies:
+            - cmake
+            - ninja
+
+definitions:
+
+    # Default cmake options as passed to cmake
+    - options_cmake: |
+        -G Ninja -S . -B "%(builddir)" \
+        -DCMAKE_C_FLAGS="${CFLAGS}" \
+        -DCMAKE_CXX_FLAGS="${CXXFLAGS}" \
+        -DCMAKE_C_FLAGS_RELEASE="" \
+        -DCMAKE_CXX_FLAGS_RELEASE="" \
+        -DCMAKE_LD_FLAGS="${LDFLAGS}" \
+        -DCMAKE_BUILD_TYPE="Release" \
+        -DCMAKE_INSTALL_LIBDIR="lib" \
+        -DCMAKE_INSTALL_PREFIX="%(prefix)" \
+        -DCMAKE_LIB_SUFFIX="%(libsuffix)"
