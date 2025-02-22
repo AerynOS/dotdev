@@ -7,7 +7,8 @@ export default defineConfig({
 	integrations: [
 		starlight({
       logo: {
-        src: '@/images/logo.svg',
+        dark: '@/images/logo.svg',
+        light: '@/images/logo-light-mode.svg',
         replacesTitle: false,
       },
 			title: 'AerynOS Docs',
