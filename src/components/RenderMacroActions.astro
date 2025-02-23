@@ -1,6 +1,7 @@
 ---
 import yaml from 'yaml';
 import fs from 'node:fs';
+import { Code } from '@astrojs/starlight/components';
 
 // Define props
 const { group, description, example } = Astro.props;
@@ -13,18 +14,18 @@ interface Props {
   description: string;
   example ?: string;
 }
+
 ---
 
 {data.actions.map(action=>{
   return Object.entries(action).map(([name, props])=>{
     return (
         <div>
-          <h2>%{name}</h2>
-          <div>{description}</div>
-          {example && (
+          <h2 id={name}>%{name}</h2>
+          <div>{props.description}</div>
+          {props.example && (
             <div>
-              <h3>Example</h3>
-              <pre>{example}</pre>
+              <Code title="Example usage" code={props.example} lang="bash" frame="terminal" />
             </div>
           )}
       </div>
