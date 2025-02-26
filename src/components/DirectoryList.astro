@@ -1,0 +1,99 @@
+---
+/**
+ *
+ * Uses the starlight sidebar to geneate a index page
+ *
+ */
+import { getCollection } from "astro:content";
+import { LinkCard, CardGrid } from "@astrojs/starlight/components";
+import { trimSlashes } from "node_modules/astro/dist/core/path";
+import type {
+  SidebarEntry,
+  SidebarGroup,
+  SidebarLink,
+} from "node_modules/@astrojs/starlight/utils/routing/types";
+const { sidebar } = Astro.locals.starlightRoute;
+
+let docs = await getCollection("docs");
+
+function docMatchesHref(href) {
+  return (doc) => trimSlashes(doc.id) == trimSlashes(href);
+}
+
+function isSidebarLink(entry?: SidebarEntry): entry is SidebarLink {
+  return entry && entry.type == "link";
+}
+function isSidebarGroup(entry?: SidebarEntry): entry is SidebarGroup {
+  return entry && entry.type == "group";
+}
+function currentSidebarEntries(sidebar: SidebarEntry[]): SidebarEntry[] {
+  let currentItem = sidebar
+    .filter(isSidebarLink)
+    .find((link) => link.isCurrent);
+
+  if (currentItem) {
+    return sidebar.filter((v) => v != currentItem);
+  }
+
+  let groups = sidebar.filter((v) => isSidebarGroup(v));
+  for (let group of groups) {
+    let currentGroup = currentSidebarEntries(group.entries);
+    if (currentGroup.length > 0) {
+      return currentGroup;
+    }
+  }
+
+  return [];
+}
+
+function firstLink(group) {
+  let link = group.entries[0];
+  if (link.type == "group") {
+    return firstLink(link);
+  } else {
+    return link;
+  }
+}
+
+function sidebarLinks(path: string, sidebar: SidebarEntry[]): SidebarLink[] {
+  let entries: SidebarEntry[] = [];
+
+  if (path == "/") {
+    entries = sidebar;
+  } else {
+    entries = currentSidebarEntries(sidebar);
+  }
+
+  return entries.flatMap((item) => {
+    if (item.type == "link") {
+      return item;
+    }
+    if (item.type == "group") {
+      return firstLink(item);
+    }
+  });
+}
+let links = sidebarLinks(Astro.url.pathname, sidebar).map((item) => {
+  let page = docs.find(docMatchesHref(item.href));
+  if (page) {
+    return {
+      href: item.href,
+      label: item.label,
+      description: page.data.description,
+    };
+  }
+  return {
+    href: item.href,
+    label: item.label,
+    description: null,
+  };
+});
+---
+
+<CardGrid>
+  {
+    links.map((p) => (
+      <LinkCard href={p.href} title={p.label} description={p.description} />
+    ))
+  }
+</CardGrid>

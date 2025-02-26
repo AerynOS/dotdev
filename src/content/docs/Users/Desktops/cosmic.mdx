@@ -1,0 +1,31 @@
+---
+title: COSMIC
+lastUpdated: 2024-09-10T00:07:10Z
+description: COSMIC Desktop
+sidebar:
+  order: 900
+
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+The [COSMIC Desktop](https://system76.com/cosmic) from [System76](https://system76.org) is a highly popular
+choice with AerynOS users. Despite early alpha status, it is notable for being written in Rust and using
+a modern multiprocess architecture, while being Wayland-only. For many, this makes AerynOS and COSMIC an
+ideal partnership.
+
+<Aside type="tip">
+As of prealpha `0.4`, it is possible to install the COSMIC desktop directly at installation time using the
+desktop selection list in `lichen`, our system installer.
+</Aside>
+
+### Installing COSMIC on AerynOS
+
+```bash
+sudo moss install cosmic-desktop
+```
+
+### Controlling the display manager
+
+If you've installed COSMIC over the top of a GNOME install, you can safely remove `gdm` and have
+`cosmic-greeter` take over. Note: GNOME Shell still expects `gdm` for full functionality.
