@@ -74,25 +74,6 @@ function sidebarLinks(path: string, sidebar: SidebarEntry[]): SidebarLink[] {
   });
 }
 
-
-// function manuaSidebar(sidebar: SidebarEntry[]): any[] {
-//   return sidebar.map((item) => {
-//     if (item.type == "link") {
-//       return {
-//         slug: trimSlashes(item.href),
-//       };
-//     }
-//     if (item.type == "group") {
-//       return {
-//         label: item.label,
-//         items: manuaSidebar(item.entries),
-//       };
-//     }
-//   });
-// }
-
-// let manuSidebar = manuaSidebar(sidebar)
-// console.dir({manuSidebar}, {depth:100})
 let links = sidebarLinks(Astro.url.pathname, sidebar).map((item) => {
   let page = docs.find(docMatchesHref(item.href));
   if (page) {
