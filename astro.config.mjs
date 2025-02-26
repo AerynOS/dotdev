@@ -63,10 +63,6 @@ export default defineConfig({
               ]
             },
             {
-              label: 'Macros',
-              autogenerate: { directory: 'Packaging/Macros' }
-            },
-            {
               label: 'Recipes',
               items: [
                 { slug: 'packaging/recipes' },
@@ -93,7 +89,11 @@ export default defineConfig({
                   ]
                 }
               ]
-            }
+            },
+            {
+              label: 'Macros',
+              autogenerate: { directory: 'Packaging/Macros' }
+            },
           ]
         }
       ],
