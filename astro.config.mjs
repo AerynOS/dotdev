@@ -22,11 +22,11 @@ export default defineConfig({
 			sidebar: [
 				{
 					label: 'Users',
-          autogenerate: { directory: 'users' },
+          autogenerate: { directory: 'Users' },
 				},
 				{
 					label: 'Packaging',
-          autogenerate: { directory: 'packaging' },
+          autogenerate: { directory: 'Packaging' },
 				},
 			],
 		}),

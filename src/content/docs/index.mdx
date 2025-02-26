@@ -1,7 +1,9 @@
 ---
 title: Documentation
+sidebar:
+  order: 1
 ---
-
+import DirectoryList from '@components/DirectoryList.astro';
 import { Aside } from '@astrojs/starlight/components';
 
 <Aside type="caution">
@@ -9,3 +11,5 @@ import { Aside } from '@astrojs/starlight/components';
 </Aside>
 
 You can contribute to our documentation by [opening a pull request on GitHub](https://github.com/AerynOS/dotdev).
+
+<DirectoryList/>
