@@ -73,6 +73,7 @@ function sidebarLinks(path: string, sidebar: SidebarEntry[]): SidebarLink[] {
     }
   });
 }
+
 let links = sidebarLinks(Astro.url.pathname, sidebar).map((item) => {
   let page = docs.find(docMatchesHref(item.href));
   if (page) {
