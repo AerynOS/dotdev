@@ -21,6 +21,17 @@ export default defineConfig({
       ],
       sidebar: [
         {
+            label: 'AerynOS',
+            items: [
+                { slug: 'aerynos' },
+                { slug: 'aerynos/overview' },
+                { slug: 'aerynos/philosophy' },
+                { slug: 'aerynos/roadmap' },
+                { slug: 'aerynos/faq' },
+                { slug: 'aerynos/contribute' }
+            ]
+        },
+        {
           label: 'Users',
           items: [
             { slug: 'users' },
