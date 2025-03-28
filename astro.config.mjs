@@ -95,7 +95,27 @@ export default defineConfig({
               autogenerate: { directory: 'Packaging/Macros' }
             },
           ]
-        }
+        },
+          {
+              label: 'Developers',
+              items: [
+                  { slug: 'developers' },
+                  {
+                    label: 'Stone Format',
+                    items: [
+                        { slug: 'developers/stone' },
+                        { slug: 'developers/stone/header' },
+                        {
+                            label: 'V1',
+                            items: [
+                                { slug: 'developers/stone/v1' },
+                                { slug: 'developers/stone/v1/header' }
+                            ]
+                        }
+                    ]
+                  }
+              ]
+          }
       ],
     }),
   ],
