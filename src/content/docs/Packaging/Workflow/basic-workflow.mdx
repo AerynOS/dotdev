@@ -1,6 +1,6 @@
 ---
 title: 'Basic Packaging Workflow'
-lastUpdated: 2025-01-10T01:37:00Z
+lastUpdated: 2025-04-08T00:00:00Z
 description: "Building packages locally and testing them"
 ---
 
@@ -48,7 +48,7 @@ the following commands:
 
 ```bash
 # create a new tab or open a new terminal
-gotoaerynosrepo
+gotoaosrepo
 just create-local
 just index-local
 ```
@@ -66,19 +66,19 @@ Boulder will need to have its list of "build profiles" be updated before it will
 boulder profile list
 # output
 default-x86_64:
-  - volatile = https://packages.aerynos.com/volatile/x86_64/stone.index [0]
+  - volatile = https://packages.aerynos.dev/volatile/x86_64/stone.index [0]
 
 # add new local-x86_64 build profile
 boulder profile add \
-  --repo name=volatile,uri=https://packages.aerynos.com/volatile/x86_64/stone.index,priority=0 \
+  --repo name=volatile,uri=https://packages.aerynos.dev/volatile/x86_64/stone.index,priority=0 \
   --repo name=local,uri=file://${HOME}/.cache/local_repo/x86_64/stone.index,priority=100 \
   local-x86_64
 boulder profile list
 # output
 default-x86_64:
- - volatile = https://packages.aerynos.com/volatile/x86_64/stone.index [0]
+ - volatile = https://packages.aerynos.dev/volatile/x86_64/stone.index [0]
 local-x86_64:
- - volatile = https://packages.aerynos.com/volatile/x86_64/stone.index [0]
+ - volatile = https://packages.aerynos.dev/volatile/x86_64/stone.index [0]
  - local = file:///home/ermo/.cache/local_repo/x86_64/stone.index [100]
 ```
 
@@ -96,7 +96,7 @@ local-x86_64:
       active: true
     volatile:
       description: ''
-      uri: https://packages.aerynos.com/volatile/x86_64/stone.index
+      uri: https://packages.aerynos.dev/volatile/x86_64/stone.index
       priority: 0
       active: true
 ```
@@ -110,14 +110,14 @@ Listing and adding moss-format repositories containing stone.index files is done
 ```bash
 moss repo list
 # output
- - unstable = https://aerynos.dev/volatile/x86_64/stone.index [0]
+ - unstable = https://packages.aerynos.com/volatile/x86_64/stone.index [0]
 # add repositories
-sudo moss repo add volatile https://packages.aerynos.com/volatile/x86_64/stone.index -p 10
+sudo moss repo add volatile https://packages.aerynos.dev/volatile/x86_64/stone.index -p 10
 sudo moss repo add local file://${HOME}/.cache/local_repo/x86_64/stone.index -p 100
 moss repo list
 # output
- - unstable = https://aerynos.dev/volatile/x86_64/stone.index [0]
- - volatile = https://packages.aerynos.com/volatile/x86_64/stone.index [10]
+ - unstable = https://packages.aerynos.com/volatile/x86_64/stone.index [0]
+ - volatile = https://packages.aerynos.dev/volatile/x86_64/stone.index [10]
  - local = file:///home/ermo/.cache/local_repo/x86_64/stone.index [100]
 ```
 
@@ -145,8 +145,8 @@ sudo moss repo disable volatile
 sudo moss repo disable local
 moss repo list
 # output
- - unstable = https://aerynos.dev/volatile/x86_64/stone.index [0]
- - volatile = https://packages.aerynos.com/volatile/x86_64/stone.index [10] (disabled)
+ - unstable = https://packages.aerynos.com/volatile/x86_64/stone.index [0]
+ - volatile = https://packages.aerynos.dev/volatile/x86_64/stone.index [10] (disabled)
  - local = file:///home/ermo/.cache/local_repo/x86_64/stone.index [100] (disabled)
 ```
 
@@ -165,8 +165,8 @@ sudo moss repo enable volatile
 sudo moss repo enable local
 moss repo list
 # output
- - unstable = https://aerynos.dev/volatile/x86_64/stone.index [0]
- - volatile = https://packages.aerynos.com/volatile/x86_64/stone.index [10]
+ - unstable = https://packages.aerynos.com/volatile/x86_64/stone.index [0]
+ - volatile = https://packages.aerynos.dev/volatile/x86_64/stone.index [10]
  - local = file:///home/ermo/.cache/local_repo/x86_64/stone.index [100]
 ```
 
@@ -177,7 +177,7 @@ To actually build a recipe, it is recommended that new packagers start out by bu
 
 ```bash
 # Go into the root of the AerynOS recipe directory 
-gotoaerynosrepo
+gotoaosrepo
 # change to the directory holding the nano recipe
 chpkg nano
 # bump the release number in the nano recipe
@@ -220,7 +220,7 @@ Often, it will be prudent to clean out the local repository after the associated
 accepted upstream.
 
 ```bash
-gotoaerynosrepo
+gotoaosrepo
 just clean-local
 sudo moss repo disable volatile
 sudo moss repo disable local
