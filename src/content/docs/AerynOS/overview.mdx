@@ -6,18 +6,18 @@ description: Overview of the AerynOS project and its technologies
 
 import { Aside } from '@astrojs/starlight/components';
 
-AerynOS is a new work-in-progress Linux-based operating system. The development team are working from the ground up, taking an engineering led approach to developing a distrubtion that is produced entirely by the internal tooling they have developed. Rather than taking another Linux-based operating system as a base upon which to build AerynOS, the team are starting from scratch. This has advantages in that the team do not have to work around technical decisions and/or limitations inherited from a "base operating system" however, the ofset to this, is the time it takes to build up a competitive offering against what's already out there.
+AerynOS is a new work-in-progress Linux-based operating system. The development team are working from the ground up, taking an engineering led approach to developing a distribution that is produced entirely by the internal tooling they have developed. Rather than taking another Linux-based operating system as a base upon which to build AerynOS, the team are starting from scratch. This has advantages in that the team do not have to work around technical decisions and/or limitations inherited from a "base operating system" however, the offset to this, is the time it takes to build up a competitive offering against what's already out there.
 
 The key focus for now is to develop the core infrastructure for AerynOS. This includes Boulder (the packaging builder), Moss (the package manager), Summit (the build scheduler), Avalanche (a middleware controller and reporting tool) and Vessel (the repository manager). Whilst these are all just names, this wiki will expand on what each of these tools does in more detail later on.
 
 As these core infrastructure tools are developed, they will help deliver headline features such as:
 1. Atomic: The distro either successfully completes an update or nothing changes, no half update causing unexpected issues
-2. Immutibility: A distro that has read only core system files that cannot be modified after installation.
+2. Immutability: A distro that has read only core system files that cannot be modified after installation.
 3. Statelessness: A stateless distro only allows system files to be installed to a specific folder which it controls.
 4. Deduplicated state history: The ability to revert to earlier "states" without taking up mass amounts of drive space
 5. Boot menu level history: The ability to revert to one of the last four states (including kernel) if any goes wrong or at your convenience
 
-Many of these features are already in place and there is a lot more that is planned for delivery. A key missing feature currently is immutability. The AerynOS team already have the outline plan on how they will deliver immutability without sacrificing the simplicity of use without having to revert to containerized packages.
+Many of these features are already in place and there is a lot more that is planned for delivery. A key missing feature currently is immutability. The AerynOS team already have the outline plan on how they will deliver immutability without sacrificing the simplicity of use without having to revert to containerised packages.
 
 <Aside type="caution">
     Remember, AerynOS is still in development. Despite our goals, we must be clear
