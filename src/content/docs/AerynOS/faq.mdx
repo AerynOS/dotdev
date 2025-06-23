@@ -4,31 +4,227 @@ lastUpdated: 2025-03-28T05:28:00Z
 description: Frequently asked questions
 ---
 
-import { Aside } from '@astrojs/starlight/components';
+import { Aside } from "@astrojs/starlight/components";
 
 <Aside type="caution">
-    This section is a work in progress and will be expanded over time.
+  This section is a work in progress and will be expanded over time.
 </Aside>
 
-## Project identity
+# Project identity
 
-<details>
-    <summary>What does AerynOS mean and how do I pronounce it?</summary>
+### What does AerynOS mean and how do I pronounce it?
 
-    AerynOS is a stylised spelling of "Erin", alluding to the project's Irish roots. It is pronounced
-    exactly the same as "Erin" - "AIR-in" OS. It's also a play on "aer" and the phonetic "air" sound,
-    indictive of our desire to produce an open, trusted and high-performance operating system.
+AerynOS is a stylised spelling of "Erin", alluding to the project's Irish roots. It is pronounced exactly the same as "Erin" - "AIR-in" OS. It's also a play on "aer" and the phonetic "air" sound, indicative of our desire to produce an open, trusted and high-performance operating system.
 
-    It's pronounced as "AIR-in" OS.
-</details>
+It's pronounced as "AIR-in" OS.
 
-<details>
-    <summary>What was Serpent OS?</summary>
+### What was Serpent OS?
 
-    Serpent OS is the former name of AerynOS. We [announced our rebrand](https://aerynos.com/blog/2025/02/14/evolve-this-os/) back
-    in February 2025, which culminated with the inaugural release of AerynOS 2025.03 on March 25th, 2025. Per the announcement,
-    our desire to rebrand was chiefly driven due to effectively being lumbered with a hastily chosen name, that poorly reflected
-    the project's goals and aspirations.
+Serpent OS is the former name of AerynOS. We [announced our rebrand](https://aerynos.com/blog/2025/02/14/evolve-this-os/) back in February 2025, which culminated with the inaugural release of AerynOS 2025.03 on March 25th, 2025. Per the announcement, our desire to rebrand was chiefly driven due to effectively being lumbered with a hastily chosen name, that poorly reflected the project's goals and aspirations.
 
-    The project itself remains the same, with the same goals and aspirations, but with a new name and a fresh coat of paint.
-</details>
+The project itself remains the same, with the same goals and aspirations, but with a new name and a fresh coat of paint.
+
+# Installation Questions
+
+### Which CPUs does AerynOS support?
+
+AerynOS is currently only compiled for the x86_64-v2 target architecture, which means that it will run on CPUs supporting x86_64-v2 or greater psABI feature levels.
+
+Checking the currently supported x86_64 psABI feature level of a system can be done by executing the following snippet in a terminal as a normal user:
+
+```curl https://raw.githubusercontent.com/HenrikBengtsson/x86-64-level/refs/heads/develop/x86-64-level | bash -s -- --verbose```
+
+### Does AerynOS offer NVIDIA GPU support?
+
+Due to the way NVIDIA distributes its drivers, maintaining them in a distro is labour intensive and frustrating when they do not work as advertised.
+
+Given AerynOS is in the Alpha development stage, only limited, best effort NVIDIA enablement related to cards supported by the so-called nvidia-open-gpu-kernel-modules is currently offered.
+
+You can check the status of NVIDIA support in [AerynOS/recipes#435](https://github.com/AerynOS/recipes/issues/435)
+
+### Does AerynOS support being installed alongside another OS?
+
+Officially? Not yet.
+
+You can try, but there is no guarantee that AerynOS won't eat your other OS.
+
+You have been warned.
+
+### What is the recommended partition layout for AerynOS?
+
+In practice, we recommend that you install AerynOS to a separate drive with:
+
+- A >=256MB ESP FAT32 partition (type 1 in fdisk).
+  -   This must be manually formatted for the installer to recognise it.
+- A 4GB XBOOTLDR FAT32 partition (type 142 in fdisk, bls_boot in gparted).
+  - This must be manually formatted for the installer to recognise it.
+  - This partition is large, because it is where the AerynOS kernel and (in the future) rescue image files will be saved.
+- A >20 GB system xfs partition
+  - The larger the xfs system (/ or root) partition is, the more OS /usr directory rollback states it can support in /.moss/.
+
+```󰌽 ermo@virgil:~
+❯ sudo fdisk -l /dev/nvme1n1
+Disk /dev/nvme1n1: 931,51 GiB, 1000204886016 bytes, 1953525168 sectors
+Disk model: Samsung SSD 980 PRO 1TB
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: ED391D3B-7BCC-4407-911F-FF7B2CECB45A
+
+Device           Start        End    Sectors   Size Type
+/dev/nvme1n1p1    2048     526335     524288   256M EFI System
+/dev/nvme1n1p2  526336    8914943    8388608     4G Linux extended boot
+/dev/nvme1n1p3 8914944 1953523711 1944608768 927,3G Linux root (x86-64)
+󰌽 ermo@virgil:~
+❯ sudo lsblk -f /dev/nvme1n1
+NAME        FSTYPE FSVER LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
+nvme1n1
+├─nvme1n1p1 vfat   FAT32       CA93-B86A
+├─nvme1n1p2 vfat   FAT32       C837-2227
+└─nvme1n1p3 xfs                569404f0-74ce-4c9e-936a-96aca25c7cd0  845,6G     9% /
+󰌽 ermo@virgil:~
+```
+NB: Remember, there is nothing stopping you from creating an extra partition, formatting it with a filesystem of your choice, and then configuring /etc/fstab to mount it as /home after AerynOS has been installed, if you want to use a different filesystem than xfs for your /home folders for whatever reason.
+
+### Why do you recommend the xfs filesystem for the root partition?
+
+[Testing has shown](https://github.com/serpent-os/tools/blob/main/moss-filesystem-performance.md) that, due to how moss saves rollback states, xfs is by far the quickest filesystem in practice for AerynOS root partition usage.
+
+We currently do not recommend either ext4 or f2fs root partitions, because testing has shown that they offer very poor performance on the first update (sudo moss sync -u) after a cold start of your computer compared to xfs.
+
+### Do you support installing AerynOS on ext4?
+
+We currently **strongly recommend** that you use **xfs** on your root partition for the best experience with moss and AerynOS.
+
+### Do you support installing AerynOS on f2fs?
+
+We currently **strongly recommend** that you use **xfs** on your root partition for the best experience with moss and AerynOS.
+
+### Do you support installing AerynOS on btrfs?
+
+Not yet
+
+### Do you support installing AerynOS on bcachefs?
+
+Not yet
+
+### Do you support installing AerynOS on ZFS?
+
+Not at this stage. We may or may not decide to support it at some unspecified point in the future, provided we can guarantee that we are legally in the clear to do so.
+
+# Usage Questions
+
+### How do I make my system check for updates and install them?
+
+```sudo moss sync -u```
+
+This is a short hand form of:
+
+```
+# update the local systems "view" of which packages are available
+sudo moss repo update
+# synchronise the installed state against the list of available packages
+sudo moss sync
+```
+
+### Why don't application icons for newly installed apps show up in my current session after a sync or install?
+
+It is a known issue and we are working on a solution.
+
+For now, log out and back in again and they will show up.
+
+### When do I need to reboot after updates?
+
+- Kernel updates require a reboot.
+- Some updates require you to log out of your desktop session and back in (see above).
+- Most updates only require you to close the apps that were updated and start them again.
+
+### How do I access the rollback feature at boot?
+
+Hold down or mash your Space key repeatedly after your computer starts up.
+
+### How do I verify the integrity of my install states in Serpent OS?
+
+```sudo moss state verify```
+
+Tack on ```--help``` to see the options for verify.
+
+### How do I clean out older install states in Serpent OS?
+
+```sudo moss state prune```
+
+Tack on ```--help``` to see the options for prune.
+
+### How do I configure custom kernel command line parameters applied at each boot?
+
+See the [blsforme repo readme](https://github.com/AerynOS/blsforme/?tab=readme-ov-file#filesystem-layout) for the expected format.
+
+Typically, it is necessary to change the installed system state with ```moss``` for command-line snippets to take effect.
+
+One way of doing that is to do a ```sudo moss remove nano -y && sudo moss install nano -y```, followed by ```sudo moss boot status``` to check if the new cmdline snippet is now active.
+
+# Package Questions
+
+### How come your package repository is so small?
+
+We are still in heavy development ("Alpha") and are developing our back end and associated automated rebuild processes.
+
+If we discover that it is necessary for us to rebuild our entire repository, we would like the ability to do so in the span of an afternoon (using multiple builders in parallel).
+
+Once our back end story and our automated rebuild process story are both further advanced, we will begin scaling out the repository to contain more packages.
+
+### Could you package (...) please?
+
+See above.
+
+For now, we encourage users to use flatpaks for the applications we do not yet carry in our repository.
+
+Currently, we are focusing on adding must-have packages for platform bring-up, for things that give us a development edge, or for things that help us showcase AerynOS capabilities.
+
+If the use-case for the package you are proposing is in line with the ethos above, you can make a package request [here](https://github.com/AerynOS/recipes/issues/new/choose)
+
+### Where can I learn how to package for AerynOS?
+
+Consult the packaging documentation [here](https://aerynos.dev/packaging/).
+
+In addition, consult the AerynOS [recipes/ repository](https://github.com/AerynOS/recipes).
+
+Finally, join the [AerynOS Matrix space](https://matrix.to/#/#aerynos:matrix.org) and make sure to join the Packaging room.
+
+# Project Questions
+
+### Is it ok to share links to video content of AerynOS in action in the Matrix rooms?
+
+Yes! We absolutely love seeing people using AerynOS in the wild!
+
+- Please first share them as a post in the [Show and Tell category](https://github.com/orgs/AerynOS/discussions/categories/show-and-tell),
+- Then, share a link to your post in the [AerynOS Matrix space](https://matrix.to/#/#aerynos:matrix.org) in the General room so the link to the video doesn't get lost in the Matrix.
+- If you are a content creator, you may want to join the Content Creator Corner room as well.
+
+### Which distribution is AerynOS derived from?
+
+AerynOS has been bootstrapped and built from scratch and is not based on any other distro.
+
+This implies that AerynOS has its own:
+
+- package manager (```moss```)
+- package build tool (```boulder```)
+- build pipeline consisting of:
+  - the package build dashboard and controller (```summit```)
+  - the builder-as-a-service middleware (```avalanche```)
+  - the package repository manager (```vessel```)
+
+This also implies that AerynOS does NOT build upon or use either:
+
+- ```.rpm``` related tooling from Red Hat
+- ```.deb``` related tooling from the Debian Project
+- Arch-related tooling
+
+### When will AerynOS be considered stable?
+
+AerynOS is taking on the ambitious task of creating a distribution from scratch, whilst building its own tooling and solutions for this.
+
+As such, there is no official ETA.
+
+Now that the project has hit alpha status, you will see more frequent updates and progress reports.
