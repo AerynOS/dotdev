@@ -1,6 +1,6 @@
 ---
 title: 'Prerequisites'
-lastUpdated: 2025-01-01T18:28:22+01:00
+lastUpdated: 2025-07-19T20:53:00+02:00
 description: "Prerequisites for building packages on Aeryn OS"
 ---
 
@@ -62,6 +62,31 @@ just init
 ```
 
 This will setup git hooks that will lint for the most common packaging errors upon git commit, as well as fill out commit message templates for you to edit as appropriate.
+
+
+### Setting up `git diff` auto-conversion of `manifest.*.bin` files
+
+This will make it so you can view `diff` output for binary `manifest.*.bin` files in both `git diff` and `git log -p .` invocations.
+
+Edit your `~/.gitconfig` file to contain the following:
+
+```ini
+[diff "manifest.*.bin"]
+    textconv = moss inspect
+    binary = true
+```
+
+
+### Setting up the `git gone` alias
+
+This will make it so that executing `git gone` will remove any local branches that no longer exist upstream.
+
+Edit your `~/.gitconfig` file to contain the following:
+
+```ini
+[alias]
+    gone = "!f() { git fetch --all --prune; git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D; }; f"
+```
 
 
 ## Adding /etc/subuid and /etc/subgid entries
