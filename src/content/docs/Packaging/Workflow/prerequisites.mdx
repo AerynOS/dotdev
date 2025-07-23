@@ -1,6 +1,6 @@
 ---
 title: 'Prerequisites'
-lastUpdated: 2025-07-19T20:53:00+02:00
+lastUpdated: 2025-07-23T12:50:00+02:00
 description: "Prerequisites for building packages on Aeryn OS"
 ---
 
@@ -68,14 +68,15 @@ This will setup git hooks that will lint for the most common packaging errors up
 
 This will make it so you can view `diff` output for binary `manifest.*.bin` files in both `git diff` and `git log -p .` invocations.
 
-Edit your `~/.gitconfig` file to contain the following:
+Edit the recipe repo `.git/config` file to contain the following below the `[core]` section:
 
 ```ini
-[diff "manifest.*.bin"]
+[diff "moss"]
     textconv = moss inspect
     binary = true
 ```
 
+The recipe repo already contains the `.gitattribute` file that sets up the `moss` diff filter referenced here.
 
 ### Setting up the `git gone` alias
 
