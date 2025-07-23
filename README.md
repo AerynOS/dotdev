@@ -6,13 +6,32 @@ If this is your first encounter with a git-based workflow, we recommend that you
 
 ### How to set up your local copy of the documentation site for editing and viewing
 
-1. Install `npm`. On AerynOS this is done with `sudo moss install 'binary(npm)'`
-2. Clone this project in such a way that you have write access to it and can push commits to it. One way to do this is to [use the `gh` github-cli](https://cli.github.com/manual/gh_repo_clone) binary, which you can install on AerynOS with `sudo moss install 'binary(gh)'`.
-3. Navigate to the root of the newly cloned folder.
-4. Run `npm install` to install the necessary NodeJS packages for building the local copy of the website into web pages you can view in your browser to check your work.
-5. Run `npm run dev` to build the current website source into html pages. Once this is running, your content edits will be automatically turned into html as you save them.
-   - note that after running the above, `npm` will notify you that it has started a local webserver on `http://localhost:4321`. Click that link to open the local copy of the doc site in your browser.
-6. When you are happy with your edits, commit your changes in your local git repository and create a Pull Request from said local changes.
+Before attempting to compile and show the website locally, please ensure that:
+
+- NodeJS is installed on your system
+- `pnpm` is available and in your path
+  - with NodeJS installed, you can run the following from your ${HOME} directory:
+    ```
+    npm install pnpm@latest-10
+    ```
+  - Make sure you add `${HOME}/node_modules/.bin` to your shell ${PATH}
+- With the above prerequisites satisfied, clone the present repo and cd into the root of it.
+- Then run:
+  ``` 
+  pnpm install
+  ```
+
+## How to build and show the site locally in your browser
+
+After the above import and install operations have completed successfully on your system, run:
+
+    pnpm run dev
+
+... and follow the instructions shown.
+
+At this point, any time you edit a page, the changes should show up live in your browser..
+
+When you are happy with your edits, commit your changes in your local git repository and create a Pull Request from said local changes.
 
 ### Suggested writing style guide
 
