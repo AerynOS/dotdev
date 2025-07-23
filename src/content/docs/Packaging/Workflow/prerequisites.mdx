@@ -7,6 +7,7 @@ description: "Prerequisites for building packages on Aeryn OS"
 To set up a AerynOS system to be able to build package recipes, a few prerequisites need to be
 installed, and a new directory for storing local build artifacts needs to be set up.
 
+
 ## Installing the `build-essential` package
 
 We maintain a `build-essential` metapackage that should contain the basics for getting started
@@ -66,7 +67,7 @@ This will setup git hooks that will lint for the most common packaging errors up
 
 ### Setting up `git diff` auto-conversion of `manifest.*.bin` files
 
-This will make it so you can view `diff` output for binary `manifest.*.bin` files in both `git diff` and `git log -p .` invocations.
+This will make it so you can view `git diff` output for binary `manifest.*.bin` files in both `git diff` and `git log -p .` invocations.
 
 Edit the recipe repo `.git/config` file to contain the following below the `[core]` section:
 
@@ -76,7 +77,7 @@ Edit the recipe repo `.git/config` file to contain the following below the `[cor
     binary = true
 ```
 
-The recipe repo already contains the `.gitattribute` file that sets up the `moss` diff filter referenced here.
+The recipe repo already contains the `.gitattributes` file that sets up the `moss` diff filter referenced here.
 
 ### Setting up the `git gone` alias
 
