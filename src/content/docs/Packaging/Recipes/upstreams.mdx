@@ -37,7 +37,7 @@ upstreams
 
 ## Git sources
 
-A git source may be used, when providing either a `tag` or `ref`. In AerynOS we forbid the use of `branch` names in packaging, as they may mutate and break subsequent builds. Ideally a full git ref should be used.
+A git source may be used when providing a commit hash. In AerynOS, we forbid the use of `refs` (including `branch` names and `tags`) in package definitions. This helps ensure reproducibility, as `refs` may mutate and break subsequent builds. A full 40-character commit hash (SHA-1) must be used instead.
 
 <Aside type="caution">
   Git repositories do work well with `boulder` right now, however some `submodule` based builds are under active testing.
@@ -45,18 +45,18 @@ A git source may be used, when providing either a `tag` or `ref`. In AerynOS we 
 
 ```yaml
 upstreams:
-    - git|uri: $ref
+    - git|uri: $hash
 ```
 
 ```yaml
 upstreams:
     - git|uri:
-        ref: $ref
+        hash: $hash
 ```
 
 #### Additional options
 
 | Key  | Type      | Description     |
 |------|-----------|-----------------|
-| ref      | `string`  | git ref when using git source
+| hash     | `string`  | git hash when using git source
 | clonedir | `string`  | Override clone target directory
