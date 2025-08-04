@@ -1,0 +1,34 @@
+---
+title: 'Plasma'
+lastUpdated: 2025-08-04T20:06:00Z
+description: "KDE Plasma Desktop"
+---
+
+
+AerynOS now offers [KDE Plasma](https://kde.org/plasma-desktop/) as a Desktop Environment though it is currently considered beta staus. You can track the progress of identifying and resolving Plasma related issues on [Github](https://github.com/AerynOS/recipes/issues/952).
+
+#### Installing Plasma on an existing AerynOS install
+
+If you are already using GNOME, you are able to install KDE Plasma side by side and select which Desktop Environment to use in `GDM` at login. You do this by installing one of three package sets:
+
+```
+sudo moss install pkgset-aeryn-plasma-minimal
+sudo moss install pkgset-aeryn-plasma-recommended
+sudo moss install pkgset-aeryn-plasma-full
+```
+
+The names are fairly self explanatory:
+* Minimal: The minimum number of packages required for a Plasma desktop session
+* Recommended: The Plasma desktop session plus additional recommended applications
+* Full: The Plasma desktop session plus all available KDE applications
+
+
+#### Replacing GDM
+
+You can log into a KDE Plasma session via `GDM` however you also have the option to install `SDDM` or `plasma-login-manager`
+
+```sudo moss install SDDM```
+
+or
+
+```sudo moss install plasma-login-manager```
