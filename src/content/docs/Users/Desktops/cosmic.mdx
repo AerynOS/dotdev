@@ -11,12 +11,11 @@ choice with AerynOS users. Despite early alpha status, it is notable for being w
 a modern multiprocess architecture, while being Wayland-only. For many, this makes AerynOS and COSMIC an
 ideal partnership.
 
-<Aside type="tip">
-As of prealpha `0.4`, it is possible to install the COSMIC desktop directly at installation time using the
-desktop selection list in `lichen`, our system installer.
-</Aside>
-
 ### Installing COSMIC on AerynOS
+
+AerynOS currently only offers one iso with a GNOME live environment. However, `lichen` is a net based installer that allows users to select their Desktop Environment at install time. As such, you can install AerynOS COSMIC edition directly from the GNOME based AerynOS installer iso.
+
+If you already have a GNOME install and would like to try COSMIC, it is possible to install COSMIC on top of GNOME. This can be done by using the following command:
 
 ```bash
 sudo moss install cosmic-desktop
@@ -24,5 +23,17 @@ sudo moss install cosmic-desktop
 
 ### Controlling the display manager
 
-If you've installed COSMIC over the top of a GNOME install, you can safely remove `gdm` and have
-`cosmic-greeter` take over. Note: GNOME Shell still expects `gdm` for full functionality.
+If you've installed COSMIC over the top of a GNOME install, you can still log into your COSMIC session from `gdm`. You can also safely remove `gdm` and have `cosmic-greeter` take over. Note: GNOME Shell still expects `gdm` for full functionality.
+
+#### Installing cosmic-greeter
+
+```bash
+sudo moss install cosmic-greeter
+```
+
+#### Removing gdm
+If you wish to remove `gdm`, you would use the following command:
+
+```bash
+sudo moss remove gdm
+```

@@ -23,16 +23,25 @@ The names are fairly self explanatory:
 * Full: The Plasma desktop session plus all available KDE applications
 
 
-### Replacing GDM
+### Controlling the display manager
 
-You can log into a KDE Plasma session via `GDM` however you also have the option to install `SDDM` or `plasma-login-manager`
+If you've installed Plasma over the top of a GNOME install, you can still log into your Plasma session from `gdm`. You can also safely remove `gdm` and have either `sddm` or `plasma-login-manager` take over. Note: GNOME Shell still expects `gdm` for full functionality.
+
+#### Installing either sddm or plasma-login-manager
 
 ```bash
-sudo moss install SDDM
+sudo moss install sddm
 ```
 
 or
 
 ```bash
 sudo moss install plasma-login-manager
+```
+
+#### Removing gdm
+If you wish to remove `gdm`, you would use the following command:
+
+```bash
+sudo moss remove gdm
 ```
