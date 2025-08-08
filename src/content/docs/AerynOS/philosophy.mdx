@@ -1,21 +1,59 @@
 ---
 title: Philosophy
-lastUpdated: 2025-03-28T05:28:00Z
+lastUpdated: 2025-08-04T10:00:00Z
 description: The philosophy of AerynOS
 ---
 
 import { Aside } from '@astrojs/starlight/components';
 
-<Aside type="note">
-    This page has not yet been written, we're currently fleshing out the structure of the documentation.
-</Aside>
+## Stateless (aka `hermetic /usr`)
+
+Most Linux distributions follow the [Filesystem Hierarchy Standard](https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf) which sets the structure for all files and directories on a Unix-like system. In traditional FHS based Linux distributions, package files can be installed to multiple directories, these can be directories or files that users may interact with (such as config files).
+
+In AerynOS, packages are forbidden from containing any files outside of /usr directory. The /usr directory exclusively belongs to the system with the user not intended to make any changes in this directory what-so-ever. Files written under the /usr directory by a user will get removed (or reverted) the next time the system is updated.
+
+In order to enable this, packages and/or configurations are altered in AerynOS to ensure they can operate in the absence of a user provided configuration. This forces AerynOS to have sane-defaults baked in at all levels, and eliminates 3-way merge conflicts on package updates. There are no conflicts, because everything in /etc and /var belongs to the user.
+
+The stateless Linux concept was originally proposed by Red Hat in 2004 and the idea has continued to evolve from there. AerynOS leans towards the approach developed by Clear Linux, and we are refining it further.
+
+However, it might still be necessary to create or update system configuration files in lockstep with package installation. In AerynOS, the only way for files to get created or updated under /etc or /var during package installation is via package "triggers". Triggers are small scripts that are run at the tail end of package installation. AerynOS supports two forms of package triggers: Transaction triggers and System triggers.
+
+### Transaction Triggers
+
+Transaction triggers are run at the end of a transaction in an ephemeral container (Linux namespace) and may affect the contents of the transaction-specific /usr tree. This is useful for interdependent packages that need to dynamically produce plugin registries, for example.
+
+### System Triggers
+
+System triggers do not run in an isolated container, but instead are run in the context of the host system after the transaction has been successfully built and applied. It is these (minimally used) triggers that invoke `systemd-tmpfiles`, `systemd-sysusers` etc. For these cases we take special care to ensure that our default configs are sane and that a rebuild is always possible.
+
+## Atomic updates
+
+In the Linux world, an atomic update is a series of changes to a system that are treated as a single, indivisible operation. If any part of this update fails, then the entire update is cancelled with all prior parts of the now partial update being rolled back. This means that either an update completes fully as intended, or the system is left in the state it was in before the update was attempted. This is important as partial updates have been known to cause significant issues such as bricked installs.
+
+AerynOS's approach to atomic updates is fairly different to the approach taken by other Linux distributions (which normally use an A/B switch model using specific read-only filesystems to swap the whole system upon reboot). Atomic updates in AerynOS are managed by its package manager `moss` (which we also refer to as a `system state manager`). As such, AerynOS is not tied to using read-only filesystems and this allows for the use of XFS, ext4 and F2FS.
+
+As mentioned above, AerynOS utilises a stateless design where packages can only be installed to the `/usr` directory. The knowledge that packages can only be installed to this directory allows AerynOS to innovate in its approach to atomic updates.
+
+AerynOS packages are packaged up as bespoke `.stone` moss-format files. Hence, AerynOS does not use or rely on e.g. Debian .deb format package files or Fedora/RHEL .rpm format package files. These `.stone` files contain a deduplicated set of hashed files compressed in Zstd. When a `.stone` file is installed via `moss`, the files are decompressed and stored into a global, deduplicated content addressable store under`/.moss/`. Relevant metadata about these files is also stored in a database under `/.moss/`.
+
+As part of the final stages of an atomic transaction, `moss` creates (or "blits") a new `/usr` directory based on [hardlinks](https://www.virtualcuriosities.com/articles/4507/how-hard-links-and-inodes-work-on-linux) to the global content addressable store, and swaps this new `/usr` directory into place using the `renameat2` Linux kernel syscall with the `RENAME_EXCHANGE` flag, which allows for atomically exchanging an old path for a new path.
+
+As hardlinks do not take up any significant additional space on disk, and since the global content addressable store is always deduplicated as part of every transaction, `moss` stores every `/usr` directory from every transaction. This allows for retaining system snapshots with minimal overhead and provides the ability to perform atomic rollbacks to earlier transactions so long as the user does not prune existing older states.
 
 ## Self healing
 
-`TODO.`
+As part of our boot management solution every moss transaction ID is encoded into the kernel command line and is picked up during early boot into our initramfs, before `/sysroot` is pivoted to. Every kernel is correctly synchronised with the right rootfs based on the moss transaction it was associated to. Given that every transaction creates a new bootloader entry, AerynOS prunes all but the last 5 transactions from the bootloader list to keep it manageable.
 
-## Stateless (aka `hermetic user`)
+### What are the implications of this?
 
-`TODO.`
+On a Gnome based system, if you were to delete `gtk3`, `GDM`, and `gnome-shell` you would not be able to log back into the gnome session (as you've just deleted some really important part of the gnome session!). In this case, on boot you would be greeted by a linux console login prompt, which would only let you log into your user's command line shell, which is less than ideal.
 
-..
+In AerynOS, instead of this scenario, you can enter the bootloader (by mashing your spacebar) on reboot, and in the bootloader, you can select the second to last entry and this will automatically switch to the `/usr` filesystem transaction where `gtk3`, `GDM` and `gnome-shell` had not yet been deleted. On activating this entry with the Enter key, you will boot back into a working GDM for a graphical user experience.
+
+Taking this a step further, if you were to remove `glibc`, given how integral it is to the functioning of AerynOS and how it specifically includes the `renameat2` function used by `moss` to complete transactions, the system would be left in a state where the atomic update did not complete and the whole system would be broken. In a traditional Linux distribution, this will be very difficult, if not impossible to resolve without resorting to a fresh re-install.
+
+In AerynOS, however, upon trying to boot into this last transaction, the system will discover that there is an issue with the transaction and will atomically roll back to the prior bootloader entry with the associated correct `/usr` directory that works. This rollback process only takes around 1 second (depending on your hardware) and you will automatically be dropped back into a live working AerynOS system.
+
+### Could this happen?
+
+Whilst it is unlikely that a user would ever knowingly delete these very important packages (though it could happen), the more likely scenario on traditional Linux distributions is that there is a partial update that may have deleted very important aspects for a functioning system with the newer versions not having been yet installed before the update stopped. By the design features mentioned above, this will become impossible on an AerynOS based system.
