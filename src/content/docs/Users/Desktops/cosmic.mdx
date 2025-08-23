@@ -1,25 +1,28 @@
 ---
 title: COSMIC
-lastUpdated: 2024-09-10T00:07:10Z
+lastUpdated: 2025-08-23T17:25:00Z
 description: COSMIC Desktop
 ---
 
 import { Aside } from '@astrojs/starlight/components';
 
-The [COSMIC Desktop](https://system76.com/cosmic) from [System76](https://system76.org) is a highly popular
-choice with AerynOS users. Despite early alpha status, it is notable for being written in Rust and using
-a modern multiprocess architecture, while being Wayland-only. For many, this makes AerynOS and COSMIC an
-ideal partnership.
+The [COSMIC Desktop](https://system76.com/cosmic) from [System76](https://system76.org) is a highly popular choice with AerynOS users. Despite early alpha status, it is notable for being written in Rust and using a modern multiprocess architecture, while being Wayland-only. For many, this makes AerynOS and COSMIC an ideal partnership.
 
 ### Installing COSMIC on AerynOS
 
 AerynOS currently only offers one iso with a GNOME live environment. However, `lichen` is a net based installer that allows users to select their Desktop Environment at install time. As such, you can install AerynOS COSMIC edition directly from the GNOME based AerynOS installer iso.
 
-If you already have a GNOME install and would like to try COSMIC, it is possible to install COSMIC on top of GNOME. This can be done by using the following command:
+If you are already using GNOME, you are able to install Cosmic Desktop side by side and select which Desktop Environment to use in `GDM` at login. You do this by installing one of three package sets:
 
 ```bash
-sudo moss install cosmic-desktop
+sudo moss install pkgset-aeryn-cosmic-minimal
+sudo moss install pkgset-aeryn-cosmic-recommended
+sudo moss install pkgset-aeryn-cosmic-full
 ```
+The names are fairly self explanatory:
+* Minimal: The minimum number of packages required for a Cosmic Desktop session
+* Recommended: The minimal Cosmic Desktop session plus additional recommended applications
+* Full: The recommended Cosmic Dekstop session plus additional optional applications
 
 ### Controlling the display manager
 
