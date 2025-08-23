@@ -1,10 +1,20 @@
 ---
 title: 'GNOME'
-lastUpdated: 2024-09-10T00:07:13Z
+lastUpdated: 2025-08-23T17:25:00Z
 description: "GNOME Desktop"
 ---
 
-Until `prealpha 0.4`, we defaulted to the GNOME Desktop for our ISOs. It is now possible
-to select the desktop yourself, and to download GNOME or COSMIC versions of our live ISO.
+The default desktop environemnt for the AerynOS live environment and for installs using `lichen` is [GNOME](https://www.gnome.org/). We utilise Wayland display server protocol and do not offer X11 (or any fork of X11).
+
+GNOME has been chosen as the default environment due to our familiarity with the GNOME software stack and therefore our ability to maintain it whilst we work on fleshing out the AerynOS tooling an infrastructure.
 
 It is recommended to install GNOME using `lichen`, rather than adding to an existing install.
+
+### Gnome defaults
+
+* Terminal: [ptyxis](https://gitlab.gnome.org/chergert/ptyxis)
+* Media Player: [Celluloid](https://celluloid-player.github.io/)
+* Software: [Gnome Software](https://apps.gnome.org/en/Software/)
+* Document Viewer: [Gnome Papers](https://apps.gnome.org/en/Papers/)
+* System Monitor: [Gnome Resources](https://apps.gnome.org/en/Resources/)
+* Code editor: [Zed](https://zed.dev/)

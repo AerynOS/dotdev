@@ -1,28 +1,42 @@
 ---
 title: COSMIC
-lastUpdated: 2024-09-10T00:07:10Z
+lastUpdated: 2025-08-23T17:25:00Z
 description: COSMIC Desktop
 ---
 
 import { Aside } from '@astrojs/starlight/components';
 
-The [COSMIC Desktop](https://system76.com/cosmic) from [System76](https://system76.org) is a highly popular
-choice with AerynOS users. Despite early alpha status, it is notable for being written in Rust and using
-a modern multiprocess architecture, while being Wayland-only. For many, this makes AerynOS and COSMIC an
-ideal partnership.
-
-<Aside type="tip">
-As of prealpha `0.4`, it is possible to install the COSMIC desktop directly at installation time using the
-desktop selection list in `lichen`, our system installer.
-</Aside>
+The [COSMIC Desktop](https://system76.com/cosmic) from [System76](https://system76.org) is a highly popular choice with AerynOS users. Despite early alpha status, it is notable for being written in Rust and using a modern multiprocess architecture, while being Wayland-only. For many, this makes AerynOS and COSMIC an ideal partnership.
 
 ### Installing COSMIC on AerynOS
 
+AerynOS currently only offers one iso with a GNOME live environment. However, `lichen` is a net based installer that allows users to select their Desktop Environment at install time. As such, you can install AerynOS COSMIC edition directly from the GNOME based AerynOS installer iso.
+
+If you are already using GNOME, you are able to install Cosmic Desktop side by side and select which Desktop Environment to use in `GDM` at login. You do this by installing one of three package sets:
+
 ```bash
-sudo moss install cosmic-desktop
+sudo moss install pkgset-aeryn-cosmic-minimal
+sudo moss install pkgset-aeryn-cosmic-recommended
+sudo moss install pkgset-aeryn-cosmic-full
 ```
+The names are fairly self explanatory:
+* Minimal: The minimum number of packages required for a Cosmic Desktop session
+* Recommended: The minimal Cosmic Desktop session plus additional recommended applications
+* Full: The recommended Cosmic Dekstop session plus additional optional applications
 
 ### Controlling the display manager
 
-If you've installed COSMIC over the top of a GNOME install, you can safely remove `gdm` and have
-`cosmic-greeter` take over. Note: GNOME Shell still expects `gdm` for full functionality.
+If you've installed COSMIC over the top of a GNOME install, you can still log into your COSMIC session from `gdm`. You can also safely remove `gdm` and have `cosmic-greeter` take over. Note: GNOME Shell still expects `gdm` for full functionality.
+
+#### Installing cosmic-greeter
+
+```bash
+sudo moss install cosmic-greeter
+```
+
+#### Removing gdm
+If you wish to remove `gdm`, you would use the following command:
+
+```bash
+sudo moss remove gdm
+```

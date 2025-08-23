@@ -1,0 +1,47 @@
+---
+title: 'Plasma'
+lastUpdated: 2025-08-23T17:25:00Z
+description: "KDE Plasma Desktop"
+---
+
+
+AerynOS now offers [KDE Plasma](https://kde.org/plasma-desktop/) as a Desktop Environment though it is currently considered beta staus. You can track the progress of identifying and resolving Plasma related issues on [Github](https://github.com/AerynOS/recipes/issues/952).
+
+### Installing Plasma on an existing AerynOS install
+
+If you are already using GNOME, you are able to install KDE Plasma side by side and select which Desktop Environment to use in `GDM` at login. You do this by installing one of three package sets:
+
+```bash
+sudo moss install pkgset-aeryn-plasma-minimal
+sudo moss install pkgset-aeryn-plasma-recommended
+sudo moss install pkgset-aeryn-plasma-full
+```
+
+The names are fairly self explanatory:
+* Minimal: The minimum number of packages required for a Plasma desktop session
+* Recommended: The minimal Plasma desktop session plus additional recommended applications
+* Full: The recommended Plasma desktop session plus all available KDE applications
+
+
+### Controlling the display manager
+
+If you've installed Plasma over the top of a GNOME install, you can still log into your Plasma session from `gdm`. You can also safely remove `gdm` and have either `sddm` or `plasma-login-manager` take over. Note: GNOME Shell still expects `gdm` for full functionality.
+
+#### Installing either sddm or plasma-login-manager
+
+```bash
+sudo moss install sddm
+```
+
+or
+
+```bash
+sudo moss install plasma-login-manager
+```
+
+#### Removing gdm
+If you wish to remove `gdm`, you would use the following command:
+
+```bash
+sudo moss remove gdm
+```
