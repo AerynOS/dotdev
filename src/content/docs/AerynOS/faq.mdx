@@ -1,6 +1,6 @@
 ---
 title: FAQ
-lastUpdated: 2025-03-28T05:28:00Z
+lastUpdated: 2025-08-23T20:50:00Z
 description: Frequently asked questions
 ---
 
@@ -62,7 +62,8 @@ In practice, we recommend that you install AerynOS to a separate drive with:
 - A >20 GB system xfs partition
   - The larger the xfs system (/ or root) partition is, the more OS /usr directory rollback states it can support in /.moss/.
 
-```󰌽 ermo@virgil:~
+```
+ermo@virgil:~
 ❯ sudo fdisk -l /dev/nvme1n1
 Disk /dev/nvme1n1: 931,51 GiB, 1000204886016 bytes, 1953525168 sectors
 Disk model: Samsung SSD 980 PRO 1TB
@@ -76,20 +77,21 @@ Device           Start        End    Sectors   Size Type
 /dev/nvme1n1p1    2048     526335     524288   256M EFI System
 /dev/nvme1n1p2  526336    8914943    8388608     4G Linux extended boot
 /dev/nvme1n1p3 8914944 1953523711 1944608768 927,3G Linux root (x86-64)
-󰌽 ermo@virgil:~
+ermo@virgil:~
 ❯ sudo lsblk -f /dev/nvme1n1
 NAME        FSTYPE FSVER LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
 nvme1n1
 ├─nvme1n1p1 vfat   FAT32       CA93-B86A
 ├─nvme1n1p2 vfat   FAT32       C837-2227
 └─nvme1n1p3 xfs                569404f0-74ce-4c9e-936a-96aca25c7cd0  845,6G     9% /
-󰌽 ermo@virgil:~
+ermo@virgil:~
 ```
+
 NB: Remember, there is nothing stopping you from creating an extra partition, formatting it with a filesystem of your choice, and then configuring /etc/fstab to mount it as /home after AerynOS has been installed, if you want to use a different filesystem than xfs for your /home folders for whatever reason.
 
 ### Why do you recommend the xfs filesystem for the root partition?
 
-[Testing has shown](https://github.com/serpent-os/tools/blob/main/moss-filesystem-performance.md) that, due to how moss saves rollback states, xfs is by far the quickest filesystem in practice for AerynOS root partition usage.
+[Testing has shown](https://github.com/AerynOS/os-tools/blob/main/moss-filesystem-performance.md) that, due to how moss saves rollback states, xfs is by far the quickest filesystem in practice for AerynOS root partition usage.
 
 We currently do not recommend either ext4 or f2fs root partitions, because testing has shown that they offer very poor performance on the first update (sudo moss sync -u) after a cold start of your computer compared to xfs.
 
@@ -144,13 +146,13 @@ For now, log out and back in again and they will show up.
 
 Hold down or mash your Space key repeatedly after your computer starts up.
 
-### How do I verify the integrity of my install states in Serpent OS?
+### How do I verify the integrity of my install states in AerynOS?
 
 ```sudo moss state verify```
 
 Tack on ```--help``` to see the options for verify.
 
-### How do I clean out older install states in Serpent OS?
+### How do I clean out older install states in AerynOS?
 
 ```sudo moss state prune```
 
