@@ -1,0 +1,105 @@
+---
+title: Manage Moss States and Packages
+lastUpdated: 2025-09-28T16:14:34Z
+description: Learn how to inspect and switch states, search for software, and keep an AerynOS system up to date with moss.
+---
+
+Moss keeps AerynOS stateless by tracking every change as a state. Use the commands below to inspect those states, discover software, and keep your system current.
+
+## Check the current state
+
+1. List the active state to confirm what is running right now.
+
+```bash
+sudo moss state active
+```
+
+2. Review the state history when you need context for a rollback.
+
+```bash
+sudo moss state list
+```
+
+Use the state ID (the number after `State #`) when you need to query or activate a specific snapshot.
+
+## Activate a different state
+
+Follow these steps to roll back or advance to another state safely.
+
+1. Identify the target state ID with `moss state list`.
+2. Activate that state.
+
+```bash
+sudo moss state activate 128
+```
+
+3. Verify the change.
+
+```bash
+sudo moss state active
+```
+
+Activating a state rewrites the live system to match that snapshot. Reboot afterwards so long-running services start with the expected binaries and configuration.
+
+## Search for packages
+
+Use keyword searches to discover software by name or summary.
+
+```bash
+sudo moss search fractional
+```
+
+Add `--installed` if you only want to search software that is already present on the system.
+
+## Search for installed files
+
+Look up which package delivered a specific file when you troubleshoot or audit an installation.
+
+```bash
+sudo moss search-file libEGL.so
+```
+
+`moss search-file` scans files from installed packages only.
+
+## Install software
+
+1. Refresh repository metadata when needed.
+
+```bash
+sudo moss repo update
+```
+
+2. Install one or more packages.
+
+```bash
+sudo moss install howdy-git
+```
+
+Moss creates a new state automatically. Confirm success with `moss state active`.
+
+## Update the system
+
+Keep the entire system current with a sync operation.
+
+```bash
+sudo moss sync --update
+```
+
+`--update` pulls fresh repository metadata before applying upgrades. Moss records the result as a new state, so you can roll back if something goes wrong.
+
+## Remove software
+
+Uninstall packages you no longer need.
+
+```bash
+sudo moss remove howdy-git
+```
+
+Moss snapshots the removal in a new state. Use `moss state list` to find the previous state if you have to recover.
+
+## List currently installed software
+
+
+```bash
+moss list 
+```
