@@ -54,6 +54,13 @@ export default defineConfig({
                 { slug: "users/desktops/cosmic" },
                 { slug: "users/desktops/gnome" },
                 { slug: "users/desktops/plasma" },
+                {
+                  label: "Window Managers",
+                  items: [
+                    { slug: "users/desktops/window-managers" },
+                    { slug: "users/desktops/window-managers/sway" },
+                  ],
+                },
               ],
             },
           ],
