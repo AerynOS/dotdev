@@ -4,7 +4,9 @@ lastUpdated: 2025-09-28T16:14:34Z
 description: Learn how to inspect and switch states, search for software, and keep an AerynOS system up to date with moss.
 ---
 
-Moss keeps AerynOS stateless by tracking every change as a state. Use the commands below to inspect those states, discover software, and keep your system current.
+Moss keeps track of packaging-related operations that change the state of the /usr directory by creating a new filesystem transaction (fstx) for each associated moss operation, be it package installation, removal or upgrades. 
+
+Use the commands below to inspect and manage those states, discover software, and keep your system current.
 
 ## Check the current state
 
