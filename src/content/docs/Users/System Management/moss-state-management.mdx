@@ -41,7 +41,9 @@ sudo moss state activate 128
 moss state active
 ```
 
-Activating a state rewrites the live system to match that snapshot. Reboot afterwards so long-running services start with the expected binaries and configuration.
+Activating a state atomically swaps the currently active state's /usr directory with the new states's /usr directory, using the Linux kernel [`renameat2` syscall](https://www.man7.org/linux/man-pages/man2/rename.2.html).
+
+On successful activation of the new state, it is recommended to reboot the system, so that long-running services start with the expected binaries, libraries, and configurations.
 
 ## Search for packages
 
