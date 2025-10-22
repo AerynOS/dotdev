@@ -1,0 +1,48 @@
+---
+title: Configuration Locations
+lastUpdated: 2025-09-28T16:14:34Z
+description: Understand where packages ship their default configuration and how to override it on a stateless system.
+---
+
+AerynOS ships configuration in a stateless layout. Packages deliver defaults in `/usr/share/defaults`, while administrator and user changes live elsewhere so updates can proceed without overwriting your work.
+
+## System defaults
+
+Default files mirror the traditional `/etc` hierarchy under `/usr/share/defaults`.
+
+| Purpose | Default location | Example contents |
+| --- | --- | --- |
+| Base system settings | `/usr/share/defaults/etc` | `ld.so.conf`, `libnl`, `tpm2-tss` |
+| PAM policies | `/usr/share/defaults/pam.d` | `sudo`, `system-login`, `polkit-1` |
+| Shell profiles | `/usr/share/defaults/profile` and `/usr/share/defaults/profile.d` | `00-aeryn.sh`, interactive shell tweaks |
+| Service defaults | `/usr/share/defaults/environment.d` | Session-wide environment snippets |
+| Sudo configuration | `/usr/share/defaults/sudo` | `sudoers`, drop-in files |
+| SSH defaults | `/usr/share/defaults/ssh` | `ssh_config`, `sshd_config` |
+
+
+Packages may add more directories under `/usr/share/defaults` as required. The layout always mirrors where the file would appear under `/etc` on a traditional filesystem.
+
+## System overrides
+
+Place administrator overrides in `/etc`. Files in `/etc` shadow anything under `/usr/share/defaults` and survive package updates. Use drop-in directories such as `/etc/pam.d` or `/etc/sudoers.d` to keep customisations scoped and easy to audit.
+
+When you need to revert to the shipped defaults, remove the override from `/etc` and Moss will fall back to the matching file in `/usr/share/defaults`.
+
+## User-level configuration
+
+Desktop and application settings follow the XDG Base Directory specification. Store per-user changes in:
+
+- `~/.config` for configuration files
+- `~/.local/share` for data files
+
+These paths override both `/etc` and `/usr/share/defaults` for the owning user.
+
+## Where to look next
+
+Run the following command to explore the current defaults on your system:
+
+```bash
+ls /usr/share/defaults
+```
+
+Combine this with `moss search-file` to identify which package owns a specific default file when you need to adjust or report an issue.

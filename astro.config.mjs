@@ -50,6 +50,14 @@ export default defineConfig({
               ],
             },
             {
+              label: "System Management",
+              items: [
+                { slug: "users/system-management" },
+                { slug: "users/system-management/configuration-locations" },
+                { slug: "users/system-management/moss-state-management" },
+              ],
+            },
+            {
               label: "Desktops",
               items: [
                 { slug: "users/desktops" },
@@ -88,6 +96,7 @@ export default defineConfig({
                 { slug: "packaging/recipes/overview" },
                 { slug: "packaging/recipes/upstreams" },
                 { slug: "packaging/recipes/metadata" },
+                { slug: "packaging/recipes/monitoring" },
                 { slug: "packaging/recipes/build-deps" },
                 { slug: "packaging/recipes/package-definition" },
                 {

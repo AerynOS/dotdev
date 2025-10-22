@@ -1,0 +1,129 @@
+---
+title: Monitoring
+lastUpdated: 2025-09-28T16:14:34Z
+description: Create and maintain monitoring.yaml so release automation and security alerts stay accurate.
+---
+
+Every recipe should ship a `monitoring.yaml` so our tooling can watch for upstream releases and security issues. Use this reference to populate the file consistently and to find the data required for each field.
+
+## File layout
+
+A minimal monitoring file includes release tracking and optional security metadata:
+
+```yaml
+releases:
+  id: 00000
+  rss: https://example.com/project/releases.atom
+security:
+  cpe:
+    - vendor: example
+      product: project
+```
+
+Indent with two spaces and keep related comments inline so CI and reviewers can follow your reasoning.
+
+## Release tracking
+
+`releases.id`
+: Numeric identifier from [release-monitoring.org](https://release-monitoring.org) (Anitya). Look up the upstream project and note the number in the URL, for example `https://release-monitoring.org/project/300958` for Python.
+
+`releases.rss`
+: URL to an Atom/RSS feed for new releases. Use `~` if no feed exists.
+
+### Common feed patterns
+
+- **GitHub**: `https://github.com/<org>/<repo>/releases.atom` or `.../tags.atom`
+- **GitLab / KDE Invent**: append `/-/tags?format=atom` to the project URL, for example `https://invent.kde.org/plasma/plasma-desktop/-/tags?format=atom`
+- **PyPI**: no feed is required; prefer `~` and rely on the Anitya ID
+- **Freedesktop GitLab**: `https://gitlab.freedesktop.org/<path>/-/tags?format=atom`
+- **Custom sites**: many upstreams publish a `releases.xml`/`atom.xml` file; link directly when available
+
+### Ignore patterns
+
+Use `releases.ignore` to skip versions our repo does not track. Provide a short comment and regular expressions that match the releases to drop.
+
+```yaml
+releases:
+  id: 320206
+  ignore:
+    # Qt 6 builds are out of scope for qt5 packages
+    - ^6\.
+  rss: ~
+```
+
+Prefer anchored expressions (`^` / `$`) to avoid false positives.
+
+ For reference, `^` means "begins with", while `$` means "ends with".
+ 
+## Security metadata
+
+`security.cpe`
+: List of Common Platform Enumeration entries to watch in the NVD feed. Search [nvd.nist.gov](https://nvd.nist.gov/products/cpe) for vendor and product strings. Add every applicable CPE when upstream ships multiple identifiers.
+
+`security.ignore`
+: Optional list of CVE IDs or regexes our package should ignore (for example, CVEs that only affect optional components).
+
+If no CPE exists, set the value to `~` and add a dated comment noting the last time you checked.
+
+```yaml
+security:
+  cpe: ~
+  # No known CPE as of 2024-09-01
+```
+
+Assuming that the [repository helper script](/packaging/workflow/prerequisites/#activating-the-aerynos-helper-scripts) has been sourced for your shell, you should be able to use the `cpesearch` function to search for related CPEs for the package given as the argument.
+
+ Example: 
+ 
+    cpsearch urllib3
+ 
+## Where to find the data
+
+1. **Start with release-monitoring.org**: search for the upstream name. 
+2. **Collect feeds**: confirm the `releases.atom` or `/-/tags?format=atom` URL opens in a browser. Use curl or `wget -qO- <feed>` locally when you need to double-check.
+3. **Identify CPE strings**: search the NVD catalog or reuse values from similar recipes. Many projects share vendor IDs (for example, both upstream `python` and the `urllib3` package provide CPEs).
+4. **Document exceptions**: add comments whenever you set `ignore` patterns or leave fields empty so future maintainers understand the decision.
+
+## Example templates
+
+### GitHub project with security feed
+
+```yaml
+releases:
+  id: 4078
+  rss: https://github.com/urllib3/urllib3/releases.atom
+security:
+  cpe:
+    - vendor: urllib3
+      product: urllib3
+    - vendor: python
+      product: urllib3
+```
+
+### GitLab project with prerelease filter
+
+```yaml
+releases:
+  id: 5440
+  ignore:
+    # Track the current stable branch only
+    - 258.*
+  rss: https://gitlab.freedesktop.org/systemd/systemd/-/tags?format=atom
+security:
+  cpe:
+    - vendor: systemd_project
+      product: systemd
+```
+
+### No CPE available
+
+```yaml
+releases:
+  id: 19755
+  rss: ~
+security:
+  cpe: ~
+  # No CPE published as of 2023-03-23
+```
+
+Keep monitoring files in sync with upstream changes. When a project moves or renames releases, update the ID and feed so our automated tooling continues to work.
