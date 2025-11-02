@@ -18,6 +18,9 @@ export default defineConfig({
         github: "https://github.com/AerynOS/dotdev",
       },
       customCss: ["@/styles/global.css"],
+      editLink: {
+        baseUrl: "https://github.com/AerynOS/dotdev/edit/main/",
+      },
       plugins: [starlightLinksValidator()],
       sidebar: [
         {
