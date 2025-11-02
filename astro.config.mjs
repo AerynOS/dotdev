@@ -16,6 +16,8 @@ export default defineConfig({
       title: "AerynOS Docs",
       social: {
         github: "https://github.com/AerynOS/dotdev",
+        matrix: "https://matrix.to/#/#aerynos:matrix.org",
+        mastodon: "https://hachyderm.io/@AerynOS",
       },
       customCss: ["@/styles/global.css"],
       plugins: [starlightLinksValidator()],
