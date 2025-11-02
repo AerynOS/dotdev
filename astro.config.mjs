@@ -37,6 +37,9 @@ export default defineConfig({
       customCss: ["@/styles/global.css"],
       editLink: {
         baseUrl: "https://github.com/AerynOS/dotdev/edit/main/",
+      lastUpdated: true,
+      components: {
+        LastUpdated: "./src/components/LastUpdated.astro",
       },
       plugins: [starlightLinksValidator()],
       sidebar: [
