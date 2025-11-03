@@ -14,6 +14,21 @@ export default defineConfig({
         replacesTitle: false,
       },
       title: "AerynOS Docs",
+      // Multilingual reference implementation:
+      // locales: {
+      //   root: { label: "English", lang: "en" },
+      //   es: { label: "Spanish", lang: "es" },
+      //   fr: { label: "French", lang: "fr" },
+      //   de: { label: "German", lang: "de" },
+      //   pt: { label: "Portuguese", lang: "pt" },
+      //   zh: { label: "Chinese", lang: "zh" },
+      //   ja: { label: "Japanese", lang: "ja" },
+      //   ko: { label: "Korean", lang: "ko" },
+      //   ru: { label: "Russian", lang: "ru" },
+      //   ar: { label: "Arabic", lang: "ar", dir: "rtl" },
+      //   hi: { label: "Hindi", lang: "hi" },
+      // },
+      // defaultLocale: "root",
       social: {
         github: "https://github.com/AerynOS/dotdev",
         matrix: "https://matrix.to/#/#aerynos:matrix.org",

@@ -75,6 +75,23 @@ Images can be added to `src/assets/` and embedded in Markdown with a relative li
 
 Static assets, like favicons, can be placed in the `public/` directory.
 
+## Multilingual setup
+
+English remains the default language under `src/content/docs/`. Placeholder folders exist for these additional locales:
+
+- `src/content/docs/es` (Spanish)
+- `src/content/docs/fr` (French)
+- `src/content/docs/de` (German)
+- `src/content/docs/pt` (Portuguese)
+- `src/content/docs/zh` (Chinese)
+- `src/content/docs/ja` (Japanese)
+- `src/content/docs/ko` (Korean)
+- `src/content/docs/ru` (Russian)
+- `src/content/docs/ar` (Arabic, right-to-left)
+- `src/content/docs/hi` (Hindi)
+
+When you're ready to enable multilingual routing, uncomment the reference block in `astro.config.mjs` (labelled “Multilingual reference implementation”). Then mirror the English file’s relative path inside the target language folder. Starlight will automatically fall back to the English content whenever a translated file is missing.
+
 ## 🧞 Commands
 
 All commands are run from the root of the project, from a terminal:
