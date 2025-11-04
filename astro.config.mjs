@@ -38,10 +38,6 @@ export default defineConfig({
       editLink: {
         baseUrl: "https://github.com/AerynOS/dotdev/edit/main/",
       },
-      lastUpdated: true,
-      components: {
-        LastUpdated: "./src/components/LastUpdated.astro",
-      },
       plugins: [starlightLinksValidator()],
       sidebar: [
         {
