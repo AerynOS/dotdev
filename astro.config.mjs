@@ -2,6 +2,7 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import starlightLinksValidator from "starlight-links-validator";
+import starlightScrollToTop from "starlight-scroll-to-top";
 
 // https://astro.build/config
 export default defineConfig({
@@ -29,16 +30,28 @@ export default defineConfig({
       //   hi: { label: "Hindi", lang: "hi" },
       // },
       // defaultLocale: "root",
-      social: {
-        github: "https://github.com/AerynOS/dotdev",
-        matrix: "https://matrix.to/#/#aerynos:matrix.org",
-        mastodon: "https://hachyderm.io/@AerynOS",
-      },
+      social: [
+        {
+          icon: "github",
+          label: "GitHub",
+          href: "https://github.com/AerynOS/dotdev",
+        },
+        {
+          icon: "matrix",
+          label: "Matrix",
+          href: "https://matrix.to/#/#aerynos:matrix.org",
+        },
+        {
+          icon: "mastodon",
+          label: "Mastodon",
+          href: "https://hachyderm.io/@AerynOS",
+        },
+      ],
       customCss: ["@/styles/global.css"],
       editLink: {
         baseUrl: "https://github.com/AerynOS/dotdev/edit/main/",
       },
-      plugins: [starlightLinksValidator()],
+      plugins: [starlightLinksValidator(), starlightScrollToTop()],
       sidebar: [
         {
           label: "AerynOS",
