@@ -51,7 +51,21 @@ export default defineConfig({
       editLink: {
         baseUrl: "https://github.com/AerynOS/dotdev/edit/main/",
       },
-      plugins: [starlightLinksValidator(), starlightScrollToTop()],
+      plugins: [
+        starlightLinksValidator(),
+        starlightScrollToTop({
+          position: "right",
+          showTooltip: true,
+          smoothScroll: true,
+          threshold: 10,
+          svgPath: "M12 4L6 10H9V16H15V10H18L12 4M9 16L12 20L15 16",
+          svgStrokeWidth: 2,
+          borderRadius: "20",
+          showProgressRing: true,
+          showOnHomepage: true,
+          tooltipText: "Back to top",
+        }),
+      ],
       sidebar: [
         {
           label: "AerynOS",
