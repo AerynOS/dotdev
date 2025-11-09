@@ -2,6 +2,7 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import starlightLinksValidator from "starlight-links-validator";
+import starlightScrollToTop from "starlight-scroll-to-top";
 
 // https://astro.build/config
 export default defineConfig({
@@ -29,16 +30,42 @@ export default defineConfig({
       //   hi: { label: "Hindi", lang: "hi" },
       // },
       // defaultLocale: "root",
-      social: {
-        github: "https://github.com/AerynOS/dotdev",
-        matrix: "https://matrix.to/#/#aerynos:matrix.org",
-        mastodon: "https://hachyderm.io/@AerynOS",
-      },
+      social: [
+        {
+          icon: "github",
+          label: "GitHub",
+          href: "https://github.com/AerynOS/dotdev",
+        },
+        {
+          icon: "matrix",
+          label: "Matrix",
+          href: "https://matrix.to/#/#aerynos:matrix.org",
+        },
+        {
+          icon: "mastodon",
+          label: "Mastodon",
+          href: "https://hachyderm.io/@AerynOS",
+        },
+      ],
       customCss: ["@/styles/global.css"],
       editLink: {
         baseUrl: "https://github.com/AerynOS/dotdev/edit/main/",
       },
-      plugins: [starlightLinksValidator()],
+      plugins: [
+        starlightLinksValidator(),
+        starlightScrollToTop({
+          position: "right",
+          showTooltip: true,
+          smoothScroll: true,
+          threshold: 10,
+          svgPath: "M12 4L6 10H9V16H15V10H18L12 4M9 16L12 20L15 16",
+          svgStrokeWidth: 2,
+          borderRadius: "20",
+          showProgressRing: true,
+          showOnHomepage: true,
+          tooltipText: "Back to top",
+        }),
+      ],
       sidebar: [
         {
           label: "AerynOS",
