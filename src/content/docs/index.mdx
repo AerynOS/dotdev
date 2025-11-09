@@ -1,13 +1,43 @@
 ---
 title: Documentation
+description: Documentation for all projects under the AerynOS umbrella.
+template: splash
+editUrl: false
+hero:
+  title: AerynOS Docs
+  tagline: Documentation for all projects under the AerynOS umbrella.
+  image:
+    file: src/images/logo.svg
+  actions:
+    - text: Documentation
+      link: /aerynos
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/aerynos/dotdev
+      icon: github
+      variant: primary
+    - text: Matrix
+      link: https://matrix.to/#/#aerynos:matrix.org
+      icon: matrix
+      variant: primary
+    - text: Forums
+      link: https://github.com/orgs/AerynOS/discussions
+      icon: github
+      variant: primary
+    - text: Mastodon
+      link: https://hachyderm.io/@AerynOS
+      icon: mastodon
+      variant: primary
 ---
-import DirectoryList from '@components/DirectoryList.astro';
-import { Aside } from '@astrojs/starlight/components';
 
-<Aside type="caution">
-  This documentation is very much **work in progress**.
-</Aside>
+import DirectoryList from "@components/DirectoryList.astro";
+import { Aside } from "@astrojs/starlight/components";
+import { Card, CardGrid, Code } from "@astrojs/starlight/components";
 
-You can contribute to our documentation by [opening a pull request on GitHub](https://github.com/AerynOS/dotdev).
+# Directory
 
-<DirectoryList/>
+<DirectoryList />
+
+# Contribution
+
+Thank you to everyone who have contributed to this documentation site and has helped it to get to where it is so far. It is very much a work in progress, however any and all contributions, whether you've written code, submitted feedback, helped to fix typos or grammar, it has all been sincerely appreciated!
