@@ -31,7 +31,7 @@ export default defineConfig({
       // defaultLocale: "root",
       social: {
         github: "https://github.com/AerynOS/dotdev",
-        matrix: "https://matrix.to/#/#aerynos:matrix.org",
+        zulip: "https://aerynos.zulipchat.com/join/fuqokhsomj5mzqj6akqaiqlr/",
         mastodon: "https://hachyderm.io/@AerynOS",
       },
       customCss: ["@/styles/global.css"],
