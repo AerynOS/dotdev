@@ -2,6 +2,7 @@
 title : 'Updating an existing package recipe'
 date : 2025-08-01T14:33:00+01:00
 ---
+import { Aside } from '@astrojs/starlight/components';
 
 This page details the process of updating a package that is already present in the [AerynOS repository](https://github.com/AerynOS/recipes).
 
@@ -125,3 +126,43 @@ sudo moss install "package name"
 ```
 
 Once you have tested the package, you can make a submission for including the update in the repository.
+
+## Checking for updates
+
+To simplify update tracking for package maintainers, AerynOS provides a tool called **Ent**. Ent checks recipes against upstream sources to determine whether updates are available.
+
+Install Ent using `moss`:
+
+```bash
+sudo moss install ent
+```
+**How Ent works**
+
+Ent scans the current directory and all subdirectories beneath it. It inspects each recipe `monitoring.yaml` file and compares the referenced `stone.yaml` recipe upstreams to determine whether newer versions are available.
+
+Because Ent operates relative to the directory in which it is executed, you can control the scope of the update check by choosing where to run the command within the recipes repository.
+
+***Running update checks***
+
+To check for updates across all recipes, run the following command from the root of the recipes repository:
+
+```bash
+ent check updates
+```
+
+You can also run this command from more specific locations:
+
+* **Repository root**
+  Checks all recipes in the repository.
+
+* **Letter directory (for example, `f/`)**
+  Checks only recipes whose names start with that letter.
+
+* **Specific recipe directory (for example, `f/firefox/`)**
+  Checks only that single recipe.
+
+For example, running the command from `f/firefox/` will check only the Firefox recipe for available updates.
+
+<Aside type="note">
+    `ent` queries an upstream site for package release info *every time you run it*. Please be mindful of not running it gratuitously so as to remain a good ecosystem citizen.
+</Aside>
