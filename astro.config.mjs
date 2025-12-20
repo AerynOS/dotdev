@@ -46,7 +46,6 @@ export default defineConfig({
             { slug: "aerynos" },
             { slug: "aerynos/overview" },
             { slug: "aerynos/philosophy" },
-            { slug: "aerynos/roadmap" },
             { slug: "aerynos/faq" },
             { slug: "aerynos/contribute" },
           ],
