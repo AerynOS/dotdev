@@ -2,6 +2,8 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import starlightLinksValidator from "starlight-links-validator";
+import starlightScrollToTop from "starlight-scroll-to-top";
+import starlightKbd from "starlight-kbd";
 
 // https://astro.build/config
 export default defineConfig({
@@ -38,7 +40,29 @@ export default defineConfig({
       editLink: {
         baseUrl: "https://github.com/AerynOS/dotdev/edit/main/",
       },
-      plugins: [starlightLinksValidator()],
+      plugins: [
+        starlightLinksValidator(),
+        starlightScrollToTop({
+          position: "right",
+          showTooltip: true,
+          smoothScroll: true,
+          threshold: 10,
+          svgPath: "M12 4L6 10H9V16H15V10H18L12 4M9 16L12 20L15 16",
+          svgStrokeWidth: 2,
+          borderRadius: "20",
+          showProgressRing: true,
+          showOnHomepage: true,
+          tooltipText: "Back to top",
+        }),
+        starlightKbd({
+          globalPicker: false,
+          types: [
+            { id: "mac", label: "macOS" },
+            { id: "windows", label: "Windows" },
+            { id: "linux", label: "Linux", default: true },
+          ],
+        }),
+      ],
       sidebar: [
         {
           label: "AerynOS",
