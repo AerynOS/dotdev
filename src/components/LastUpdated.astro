@@ -1,0 +1,43 @@
+---
+import { REPO, getCommitInfo } from "@/utils/git";
+
+const { lang, lastUpdated, entry } = Astro.locals.starlightRoute;
+const filePath = entry?.filePath;
+
+const info = filePath ? await getCommitInfo(filePath) : null;
+---
+
+{
+  lastUpdated && (
+    <p>
+      <span class="nowrap">
+        Last updated:
+        <time datetime={lastUpdated.toISOString()}>
+          {lastUpdated.toLocaleDateString(lang, {
+            dateStyle: "medium",
+            timeZone: "UTC",
+          })}
+        </time>
+      </span>{" "}
+      {info && (
+        <span class="nowrap">
+          by <a href={info.committer.href}>{info.committer.name}</a> in{" "}
+          <a href={`https://github.com/${REPO}/commit/${info.hash}`}>
+            {info.hash.substring(0, 7)}
+          </a>
+        </span>
+      )}
+    </p>
+  )
+}
+
+<style>
+  a,
+  a:visited {
+    color: var(--sl-color-accent-high);
+  }
+
+  .nowrap {
+    white-space: nowrap;
+  }
+</style>
