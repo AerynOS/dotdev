@@ -31,14 +31,30 @@ export default defineConfig({
       //   hi: { label: "Hindi", lang: "hi" },
       // },
       // defaultLocale: "root",
-      social: {
-        github: "https://github.com/AerynOS/dotdev",
-        zulip: "https://aerynos.zulipchat.com/join/fuqokhsomj5mzqj6akqaiqlr/",
-        mastodon: "https://hachyderm.io/@AerynOS",
-      },
+      social: [
+        {
+          icon: "github",
+          label: "GitHub",
+          href: "https://github.com/AerynOS/dotdev",
+        },
+        {
+          icon: "zulip",
+          label: "Zulip",
+          href: "https://aerynos.zulipchat.com/join/fuqokhsomj5mzqj6akqaiqlr/",
+        },
+        {
+          icon: "mastodon",
+          label: "Mastodon",
+          href: "https://hachyderm.io/@AerynOS",
+        },
+      ],
       customCss: ["@/styles/global.css"],
       editLink: {
         baseUrl: "https://github.com/AerynOS/dotdev/edit/main/",
+      },
+      lastUpdated: true,
+      components: {
+        LastUpdated: "./src/components/LastUpdated.astro",
       },
       plugins: [
         starlightLinksValidator(),
