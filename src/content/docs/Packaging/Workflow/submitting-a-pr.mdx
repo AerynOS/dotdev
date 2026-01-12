@@ -6,12 +6,6 @@ lastUpdated: 2026-01-11T21:22:00
 import { Aside } from "@astrojs/starlight/components";
 
 
-<Aside type="caution">
-  Out of respect for your fellow developers (and potentially yourself at some point in the future), the better the quality of your commit messages, the easier it will be for us all to understand what you're submitting and why.
-
-  While you know what you're doing in the moment, other developers may not, and as time goes by, bisecting changes becomes more difficult if commit messages give you no clue as to why you made a change or what regressions might be caused if you alter it.
-</Aside>
-
 # Submitting packages to AerynOS repository
 
 Once you have prepared your package, you can submit it to the AerynOS repository by creating a pull request (PR). There are certain guidelines to follow when submitting a PR:
@@ -25,22 +19,33 @@ To keep git summaries readable, AerynOS requires the following git summary forma
 - `name: Fix <...>`
 - `[NFC] name: <description of no functional change commit>`
 
+<Aside type="note" title="No Functional Change">
+  NFC refers to "No Functional Change", which means that the commit does not introduce any new functionality or behavior, so a recipe does not need to be rebuilt as part of the PR process.
+</Aside>
+
 ## Content of Pull Request descriptions
 
-Git commits should be self-contained and self-explanatory. They serve as documentation for the changes made to a codebase so that others can understand and review them and also refer back to them later down the line.
+Git commits should be self-contained and self-explanatory. They serve as documentation for the changes made to a codebase so that others can understand and review them and also refer back to them later down the line. It is important to provide high quality git commit messages so that you or other contributors can understand the changes you are making and why.
 
-Give a very brief summary in the first line of your commit message, as a very very high level overview of what this change is achieving. Then write another paragraph (doesn't need to be a story) describing the rationale and results of the change itself.
+While you know what you're doing in the moment, other contributors may not, and as time goes by, bisecting changes becomes more difficult if commit messages give you no clue as to why you made a change or what regressions might be caused if you alter it.
 
-Git users may be viewing your changes on the terminal, so please respect the 80x24 rules.
-Try not to wrap your lines, rather, manually line break them.
-Your first line should ideally be no longer than 60 characters, and each line in the next paragraph shouldn't exceed 70.
-This will ensure the message is readable on all terminals, without enforced line wrapping.
+### Commit message format
+
+The recommendation for commit messages is:
+
+- Short summary written in the imperative mood
+- 3 - 5 bullet points of the key changes
+- Link to full changelog (if applicable)
+- Test plan demonstrating that you have actually confirmed the changes work on your local system
+- If the change resolves an issue, include a Resolves line with the issue number (Where `issuenumber` is the issue number of the package request/update).
+
+The last point about the test plan is particularly important, as it ensures that the changes have been thoroughly tested and verified before being merged into the main codebase. There is an explicit agreement that you take ownership of the quality of the code you submit and understand that if there are issues, you are likely to be the first person asked to fix an issue.
 
 <Aside type="note" title="The imperative mood">
   Git commits should be written in the [imperative mood](https://medium.com/@luka_78026/imperative-mood-makes-you-feel-good-1cad063d7014). This means that the commit message should start with a verb in the present tense, such as "Add", "Update", or "Fix". This makes the commit message more concise and easier to understand.
 </Aside>
 
-### Commit message format
+#### Example commit message
 
 An example commit message for the AerynOS recipe repository is structured as follows:
 
@@ -60,13 +65,3 @@ Full changelog [here](the.uri)
 **Resolves**:
 (If applicable for the recipes repository) Resolves aerynos/recipes#issuenumber
 ```
-
-The recommendation for commit messages is:
-
-- Short summary
-- 3 - 5 bullet points of the key changes
-- Link to full changelog (if applicable)
-- Test plan demonstrating that you have actually confirmed the changes work on your local system
-- If the change resolves an issue, include a Resolves line with the issue number (Where `issuenumber` is the issue number of the package request/update).
-
-The last point about the test plan is particularly important, as it ensures that the changes have been thoroughly tested and verified before being merged into the main codebase. There is an explicit agreement that you take ownership of the quality of the code you submit and understand that if there are issues, you are likely to be the first person asked to fix an issue.
