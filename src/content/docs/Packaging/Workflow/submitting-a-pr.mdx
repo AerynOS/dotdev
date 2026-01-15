@@ -1,0 +1,69 @@
+---
+title: 'Submitting a PR'
+lastUpdated: 2026-01-11T21:22:00
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+
+# Submitting packages to AerynOS repository
+
+Once you have prepared your package, you can submit it to the AerynOS repository by creating a pull request (PR). There are certain guidelines to follow when submitting a PR:
+
+## Naming Pull Requests
+
+To keep git summaries readable, AerynOS requires the following git summary format
+
+- `name: Add at v<version>`
+- `name: Update to v<version>`
+- `name: Fix <...>`
+- `[NFC] name: <description of no functional change commit>`
+
+<Aside type="note" title="No Functional Change">
+  NFC refers to "No Functional Change", which means that the commit does not introduce any new functionality or behavior, so a recipe does not need to be rebuilt as part of the PR process.
+</Aside>
+
+## Content of Pull Request descriptions
+
+Git commits should be self-contained and self-explanatory. They serve as documentation for the changes made to a codebase so that others can understand and review them and also refer back to them later down the line. It is important to provide high quality git commit messages so that you or other contributors can understand the changes you are making and why.
+
+While you know what you're doing in the moment, other contributors may not, and as time goes by, bisecting changes becomes more difficult if commit messages give you no clue as to why you made a change or what regressions might be caused if you alter it.
+
+### Commit message format
+
+The recommendation for commit messages is:
+
+- Short summary written in the imperative mood
+- A few sentences or bullet points with the key changes this commit introduces
+- Link to full changelog (if applicable). If this commit updates the recipe several versions, consider splitting the changelog out into version bullet point entries in ascending order (newest change last).
+- Test plan demonstrating that you have actually confirmed the changes work on your local system
+- If the change resolves an issue, include a Resolves line with the issue number (Where `issuenumber` is the issue number of the package request/update).
+
+The last point about the test plan is particularly important, as it ensures that the changes have been tested and verified before being merged into the main codebase. There is an explicit agreement that you take ownership of the quality of the changes/updates you submit, and that you understand that if there are issues, you are likely to be the first person consulted to fix said issues.
+
+<Aside type="note" title="The imperative mood">
+  Git commits should be written in the [imperative mood](https://medium.com/@luka_78026/imperative-mood-makes-you-feel-good-1cad063d7014). This means that the commit message should start with a verb in the present tense, such as "Add", "Update", or "Fix". This makes the commit message more concise and easier to understand.
+</Aside>
+
+#### Example commit message
+
+An example commit message for the AerynOS recipe repository is structured as follows:
+
+```
+brobdingnar: Update to v1.2.3
+
+Write a suitable short summary of the changes if relevant, including potentially a list of things like:
+- foo
+- bar
+- baz
+
+Full changelog [here](the.uri)
+
+**Test Plan**:
+
+- Build and install the updated package
+- Confirm functionality of changes
+
+**Resolves**:
+(If applicable for the recipes repository) Resolves aerynos/recipes#issuenumber
+```
