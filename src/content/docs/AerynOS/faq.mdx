@@ -1,6 +1,6 @@
 ---
 title: FAQ
-lastUpdated: 2025-08-23T20:50:00Z
+lastUpdated: 2026-01-15T12:25:00Z
 description: Frequently asked questions
 ---
 
@@ -58,8 +58,9 @@ In practice, we recommend that you install AerynOS to a separate drive with:
   -   This must be manually formatted for the installer to recognise it.
 - A 4GB XBOOTLDR FAT32 partition (type 142 in fdisk, bls_boot in gparted).
   - This must be manually formatted for the installer to recognise it.
-  - This partition is large, because it is where the AerynOS kernel and (in the future) rescue image files will be saved.
+  - This partition is large, because it is where the AerynOS kernel+initramfs and (in the future) rescue image files will be saved.
 - A >20 GB system xfs partition
+  - This must be manually formatted for the installer to recognise it.
   - The larger the xfs system (/ or root) partition is, the more OS /usr directory rollback states it can support in /.moss/.
 
 ```
@@ -202,7 +203,6 @@ Yes! We absolutely love seeing people using AerynOS in the wild!
 
 - Please first share them as a post in the [Show and Tell category](https://github.com/orgs/AerynOS/discussions/categories/show-and-tell),
 - Then, share a link to your post in the [AerynOS Zulip space](https://aerynos.zulipchat.com/join/fuqokhsomj5mzqj6akqaiqlr/) in the #Show-and-Tell channel in the General - Public space so the link to the video doesn't get lost in the Zulip chat.
-- If you are a content creator, you may want to join the Content Creator Corner room as well.
 
 ### Which distribution is AerynOS derived from?
 
