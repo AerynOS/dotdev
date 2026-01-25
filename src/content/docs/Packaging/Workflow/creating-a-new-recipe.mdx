@@ -139,13 +139,13 @@ description : |
     several other conveniences.
 ```
 
-<Aside type="note">
+<Aside type="note" title="Release numbering">
     Keep `release` at `1` when you introduce a brand-new package. We subsequently incrementally increase it by 1 each time we submit an update to our recipe repository.
 </Aside>
 
 ### Step 3 - Declare / correct the license
 
-Find the license in upstream’s repository (often `COPYING`, `LICENSE`, or package metadata). Convert it to an SPDX identifier.
+Find the license in upstream’s repository (often `COPYING`, `LICENSE`, or package metadata). Convert it to an [SPDX identifier](https://spdx.org/licenses/).
 
 Nano uses `GPL-3.0-or-later`. 
 
@@ -153,6 +153,12 @@ Nano uses `GPL-3.0-or-later`.
 license     :
     - GPL-3.0-or-later
 ```
+
+<Aside type="note" title="SPDX Licence identifier">
+    The SPDX License List is a list of commonly found licenses and exceptions used in free and open or collaborative software, data, hardware, or documentation. The SPDX License List includes a standardized short identifier, the full name, the license text, and a canonical permanent URL for each license and exception. 
+    
+    The purpose of the SPDX License List is to enable efficient and reliable identification of such licenses and exceptions in an SPDX document, in source files or elsewhere. 
+</Aside>
 
 ### Step 4 - Translate prerequisites into build dependencies
 
@@ -219,7 +225,7 @@ install     : |
 
 ## Update/correct the `monitoring.yaml` file
 
-Release monitoring keeps automated eyes on your package.
+Release monitoring keeps automated eyes on your package. More details around our monitoring file can be found on our [Monitoring](/packaging/recipes/monitoring) page.
 
 As mentioned earlier in this guide, the `boulder recipe new` command has already attempted to create a `monitoring.yaml` file for you. 
 
