@@ -1,106 +1,39 @@
 ---
 title: 'Creating a new package recipe'
-lastUpdated: 2026-01-24T22:15:00+01:00
+lastUpdated: 2026-01-25T12:00:00+00:00
+description: "Creating a new package recipe from scratch"
 ---
+import { Aside } from '@astrojs/starlight/components';
 
 
+This guide details the process of creating a new package recipe that is not yet present in the [AerynOS repository](https://github.com/AerynOS/recipes). We will use Nano as the running example, but the same steps apply to any new package. 
 
-This guide walks through gathering upstream information and filling in each field of a new recipe. We will use GNU Nano as the running example, but the same steps apply to any new package. 
+Before creating the package recipe yourself, please double check that there isn't already an outstanding PR for the package you want to include. Please also check if someone has created a new package request issue in the [AerynOS recipes repository](https://github.com/AerynOS/recipes).
 
 ## Prepare your workspace
 
-The guide assumes you have followed the [prerequisites](/packaging/workflow/prerequisites/) checklist and [Basic Packaging Workflow](/packaging/workflow/basic-workflow/). If you have not done this, please follow those steps first before proceeding. Ensure you have updated your local clone of the AerynOS repository on your own system before proceeding any further.
+Prior to starting, ensure you have followed the [prerequisites](/packaging/workflow/prerequisites/) set up process, the [Basic Packaging Workflow](/packaging/workflow/basic-workflow/) and updated your system in accordance with [Preparing for Packaging](/packaging/workflow/preparing-for-packaging/) guide. 
 
-As a reminder, you want to ensure you have the volatile repository enabled and fully updated on your system.
-
-For a recap, if you have followed the previous guides, the commands will be:
-
-```bash
-sudo moss repo enable volatile
-sudo moss sync -u
-gotoaosrepo
-git switch main
-gh repo sync yourusername/yourfork -b main
-git pull
-```
-
-Change `yourusername` to your github username and `yourfork` to the name you selected for your fork of the AerynOS repository. By default the fork is called `recipes`.
-
-## Create a feature branch
-
-When conducting any packaging work, it is a good idea to separate out your work in a different branch. This allows you to isolate changes you make from one package in a separate branch to changes you make to a different package in a second branch and so on. This additionally is helpful as it keeps your work separate to any underlaying changes made to the `main` recipes repository, more easily allowing you to rebase your work if needed.
-
-```bash
-git checkout -b add_packagename
-```
-
-Change "add_packagename" to whatever description you feel comfortable with.
-
-You can check what branch you are on and what branches you have in your repository with the following command:
-
-```bash
-git branch -a
-```
+If you have not done this, follow those steps first before proceeding.
 
 ## Scaffold the recipe directory
 
-Moss and Boulder do not generate skeleton recipes. Create the directory structure yourself and drop in a minimal `stone.yaml`.
-
-_// `boulder recipe new` actually generates a skeleton recipe -- have you tried it? Please try invoking `boulder recipe new --help` //_
-
-1. Pick the correct first-letter directory (`n/nano`, `p/python-click`, etc.).
-2. Create the path and enter it.
+Prior to starting, you need to create the directory structure for your recipe. In our example, we will create a recipe for the Nano text editor. Each recipe is stored in its own directory within the recipes repository you already have downloaded to your computer. In this case, we will create a directory called `nano` in the `n` directory:
 
 ```bash
+gotoaosrepo
 mkdir -p n/nano
 cd n/nano
 ```
 
-### Minimal stone.yaml skeleton
-
-Copy in this template and replace the placeholders.
-
-```yaml
-name        : example
-version     : "1.0.0"
-release     : 1
-homepage    : https://example.org
-upstreams   :
-    - https://example.org/example-1.0.0.tar.xz : <sha256>
-summary     : Short explanation
-description : |
-    One or two sentences that explain what the package delivers.
-license     :
-    - <SPDX-ID>
-builddeps   : []
-setup       : |
-    # replace with %configure, %meson, etc.
-build       : |
-    # replace with %make, %meson_build, etc.
-install     : |
-    # replace with %make_install, %meson_install, etc.
-```
-
-_// IIRC, `boulder recipe new` also tries to set up monitoring.yaml for us... :thinking_face: //_
-
-Add a matching `monitoring.yaml` with placeholder fields so release tracking can be wired up later.
-
-```yaml
-releases:
-  id: ~
-  rss: ~
-security:
-  cpe: ~
-```
-
 ## Fill the recipe step by step
 
-The rest of this guide shows how to replace each placeholder by pulling information from upstream Nano.
+The rest of this guide shows how to create a recipe and to replace any missing metadata by pulling information from upstream Nano.
 
-### Step 1 · Collect upstream metadata
+  ### Step 1 - Collect upstream metadata
 
 - Search for “GNU Nano download” to locate the upstream homepage: https://www.nano-editor.org/.
-- Note the latest release number (`8.6` at the time of writing) and the canonical download link.
+- Note the latest release number (`8.7` at the time of writing) and the canonical download link.
 - Record any prerequisites listed in upstream build instructions—these become candidates for `builddeps` later.
 
 The Nano "bleeding edge" page lists the following tools you should keep in mind:
@@ -118,61 +51,110 @@ The Nano "bleeding edge" page lists the following tools you should keep in mind:
 | pkg-config   | 0.22            |
 | texinfo      | 4.0             |
 
-### Step 2 · Add core metadata fields
+### Step 1 - Use `boulder` to help create the recipe
 
-Fill in the obvious fields first: `name`, `version`, `release`, `homepage`, and a short `summary`.
+We use `boulder` to help create the recipe using the `boulder recipe new` command. This command will generate a skeleton recipe for you to fill in. `boulder` will read the contents of the source code of the package you are trying to add and automatically create a `stone.yaml` recipe file and a `monitoring.yaml` file.
+
+```bash
+boulder recipe update "upstream URL"
+```
+
+In the example of Nano, to create a recipe based on version 8.7, you would use the following command:
+
+```bash
+boulder recipe new https://www.nano-editor.org/dist/v8/nano-8.7.tar.xz
+```
+
+This command does the following:
+
+1) Creates a new `stone.yaml` in your current directory for the package
+  - Populates as many of the fields in the `stone.yaml` file as it can automatically identify 
+  - Checks the Sha256sum of the source code and inputs this in the recipe
+2) Creates a new `monitoring.yaml` file in your current directory for the package
+  - Populates as many of the fields in the `monitoring.yaml` file as it can automatically identify 
+
+Using Nano as an example, the generated `stone.yaml` file will look like this:
+
+```yaml
+#
+# SPDX-FileCopyrightText: © 2025- AerynOS Developers
+#
+# SPDX-License-Identifier: MPL-2.0
+#
+name        : nano
+version     : 8.7
+release     : 1
+homepage    : https://www.nano-editor.org/dist/v8
+upstreams   :
+    - https://www.nano-editor.org/dist/v8/nano-8.7.tar.xz : afd287aa672c48b8e1a93fdb6c6588453d527510d966822b687f2835f0d986e9
+summary     : UPDATE SUMMARY
+description : |
+    UPDATE DESCRIPTION
+license     : 
+    - GFDL-1.2-invariants-or-later
+    - GFDL-1.2-no-invariants-or-later
+    - GFDL-1.2-or-later
+    - GPL-3.0-or-later
+    - GFDL-1.2-no-invariants-only
+    - GFDL-1.2-invariants-only
+    - GFDL-1.2-only
+    - GPL-3.0-only
+builddeps   :
+    - pkgconfig(ncurses)
+    - pkgconfig(ncursesw)
+setup       : |
+    %configure
+build       : |
+    %make
+install     : |
+    %make_install
+```
+
+The second is a `monitoring.yaml` file which we will address later in this guide.
+
+### Step 2 - Add core metadata fields
+
+The `boulder recipe new` command has already made an attempt to populate the `name`, `version`, `release` and `homepage`. Please review these and correct them if necessary.
+
+In this case, the following changes need to be made:
+
+- Correct the `homepage` to `https://www.nano-editor.org/`.
+- Update the `summary` to reflect the GNU Text Editor.
+- Fill in the `description` field with a brief description of Nano.
 
 ```yaml
 name        : nano
-version     : "8.6"
+version     : 8.7
 release     : 1
 homepage    : https://www.nano-editor.org/
+upstreams   :
+    - https://www.nano-editor.org/dist/v8/nano-8.7.tar.xz : afd287aa672c48b8e1a93fdb6c6588453d527510d966822b687f2835f0d986e9
 summary     : GNU Text Editor
 description : |
-    Nano is a small and simple text editor for the terminal.
-```
-
-Tip: keep `release` at `1` when you introduce a brand-new package. Bump it only when you make changes to the recipe after it lands and you don't update the version on version updates we go back to release 1.
-
-### Step 3 · Wire up the source tarball and checksum
-
-1. Copy the download URL from the upstream releases page (for Nano: `https://www.nano-editor.org/dist/v8/nano-8.6.tar.xz`).
-2. Download it locally and compute its SHA-256 checksum:
-
-    ```bash
-    curl -L -o nano-8.6.tar.xz https://www.nano-editor.org/dist/v8/nano-8.6.tar.xz
-    sha256sum nano-8.6.tar.xz
-    ```
-
-3. Place the URL and checksum into the `upstreams` section, then remove the temporary tarball.
-
-```yaml
-upstreams   :
-    - https://www.nano-editor.org/dist/v8/nano-8.6.tar.xz : f7abfbf0eed5f573ab51bd77a458f32d82f9859c55e9689f819d96fe1437a619
-```
-
-### Step 4 · Capture a meaningful description
-
-Pull a concise paragraph from upstream documentation or write one that explains what the package provides. Wrap at ~80 characters to keep reviews readable. Multi-line strings belong under the `description` block using the `|` YAML literal syntax.
-
-```yaml
-description : |
     Nano is a small and simple text editor for use on the terminal.
-    It mirrors Pico's interface but adds undo/redo, syntax highlighting,
-    line numbers, soft wrapping, multiple buffers, and search/replace
-    with regular expressions.
+    It copied the interface and key bindings of the Pico editor but
+    added several missing features: undo/redo, syntax highlighting,
+    line numbers, softwrapping, multiple buffers, selecting text by
+    holding Shift, search-and-replace with regular expressions, and
+    several other conveniences.
 ```
 
-### Step 5 · Declare the license
+<Aside type="note">
+    Keep `release` at `1` when you introduce a brand-new package. We subsequently incrementally increase it by 1 each time we submit an update to our recipe repository.
+</Aside>
 
-Find the license in upstream’s repository (often `COPYING`, `LICENSE`, or package metadata). Convert it to an SPDX identifier—Nano uses `GPL-3.0-or-later`.
+### Step 3 - Declare / correct the license
+
+Find the license in upstream’s repository (often `COPYING`, `LICENSE`, or package metadata). Convert it to an SPDX identifier.
+
+Nano uses `GPL-3.0-or-later`. 
 
 ```yaml
 license     :
     - GPL-3.0-or-later
 ```
 
-### Step 6 · Translate prerequisites into build dependencies
+### Step 4 - Translate prerequisites into build dependencies
 
 Map each upstream requirement to the package name that exists in AerynOS. Use `pkg-config()` helpers when libraries provide `.pc` files. Toolchain components like `gcc` and `make` are already available inside the build environment, so you do not have to list them.
 
@@ -192,36 +174,34 @@ builddeps   :
     - pkgconfig(zlib)
 ```
 
-### Step 7 · Fill in build steps
+### Step 5 · Fill in build steps
 
-Nano follows the GNU autotools flow, so use the standard macros (`%configure`, `%make`, `%make_install`). Consult the macro documentation for variations: https://aerynos.dev/packaging/macros/autotools/ .
+Nano follows the GNU autotools flow, so uses the standard macros (`%configure`, `%make`, `%make_install`). These have already been populated by `boulder recipe new` so do not need to be adapted. You can consult the [macros](/packaging/macros/) documentation for variations and additional guidance.
 
-```yaml
-setup       : |
-    %configure
-build       : |
-    %make
-install     : |
-    %make_install
-```
+### Step 6 · Review the finished recipe
 
-### Step 8 · Review the finished recipe
-
-Combining all of the steps gives you a complete `stone.yaml`:
+Combining all the prior steps gives you a complete `stone.yaml`:
 
 ```yaml
+#
+# SPDX-FileCopyrightText: © 2025- AerynOS Developers
+#
+# SPDX-License-Identifier: MPL-2.0
+#
 name        : nano
-version     : "8.6"
+version     : 8.7
 release     : 1
 homepage    : https://www.nano-editor.org/
 upstreams   :
-    - https://www.nano-editor.org/dist/v8/nano-8.6.tar.xz : f7abfbf0eed5f573ab51bd77a458f32d82f9859c55e9689f819d96fe1437a619
+    - https://www.nano-editor.org/dist/v8/nano-8.7.tar.xz : afd287aa672c48b8e1a93fdb6c6588453d527510d966822b687f2835f0d986e9
 summary     : GNU Text Editor
 description : |
     Nano is a small and simple text editor for use on the terminal.
-    It mirrors Pico's interface but adds undo/redo, syntax highlighting,
-    line numbers, soft wrapping, multiple buffers, and search/replace
-    with regular expressions.
+    It copied the interface and key bindings of the Pico editor but
+    added several missing features: undo/redo, syntax highlighting,
+    line numbers, softwrapping, multiple buffers, selecting text by
+    holding Shift, search-and-replace with regular expressions, and
+    several other conveniences.
 license     :
     - GPL-3.0-or-later
 builddeps   :
@@ -234,32 +214,113 @@ build       : |
     %make
 install     : |
     %make_install
+
 ```
 
-Adjust any values that differ for your package (version numbers, dependencies, macros, etc.) before moving on.
+## Update/correct the `monitoring.yaml` file
 
-## Add monitoring metadata
+Release monitoring keeps automated eyes on your package.
 
-Release monitoring keeps automated eyes on your package. Update `monitoring.yaml` once you know the upstream identifiers:
+As mentioned earlier in this guide, the `boulder recipe new` command has already attempted to create a `monitoring.yaml` file for you. 
+
+In the case of Nano, it wasn't able to uniquely identify the project so the output was not as valuable and needs to be corrected. 
+
+For reference, its output is as below:
+
+```yaml
+releases:
+  id: ~ # https://release-monitoring.org/ and use the numeric id in the url of project
+  rss: ~
+security:
+  cpe:
+  - vendor: gnu
+    product: nano
+  - vendor: nano_arena_project
+    product: nano_arena
+  - vendor: viz
+    product: nano_id
+  - vendor: lenovo
+    product: thinkpad_x1_nano_gen_1_firmware
+  - vendor: nvidia
+    product: jetson_nano
+  - vendor: lenovo
+    product: thinkpad_x1_nano_gen_2_firmware
+  - vendor: lenovo
+    product: thinkpad_x1_nano_gen_2
+  - vendor: lenovo
+    product: thinkpad_x1_nano_gen_1
+  - vendor: nxp
+    product: mifare_ultralight_nano_firmware
+  - vendor: jtekt
+    product: nano_cpu_tuc-6941_firmware
+  - vendor: jtekt
+    product: nano_10gx_tuc-1157_firmware
+  - vendor: autelrobotics
+    product: evo_nano_drone_firmware
+  - vendor: jtekt
+    product: nano_safety_rs01ip_tuu-1087
+  - vendor: jtekt
+    product: nano_safety_rs00ip_tuu-1086
+  - vendor: netshieldcorp
+    product: nano_25_firmware
+  - vendor: ledger
+    product: nano_x_firmware
+  - vendor: ledger
+    product: nano_s_firmware
+  - vendor: jtekt
+    product: nano_cpu_firmware
+  - vendor: jtekt
+    product: nano_2et_firmware
+  - vendor: jtekt
+    product: nano_10gx_firmware
+  - vendor: nxp
+    product: mifare_ultralight_nano
+  - vendor: nxp
+    product: i.mx_8m_nano
+  - vendor: nvidia
+    product: jetson_nano_2gb
+  - vendor: jtekt
+    product: nano_safety_tuc-1085
+  - vendor: jtekt
+    product: nano_cpu_tuc-6941
+  - vendor: jtekt
+    product: nano_2et_tuu-6949
+  - vendor: jtekt
+    product: nano_10gx_tuc-1157
+  - vendor: autelrobotics
+    product: evo_nano_drone
+  - vendor: netshieldcorp
+    product: nano_25
+  - vendor: ledger
+    product: nano_x
+  - vendor: ledger
+    product: nano_s
+  - vendor: jtekt
+    product: nano_cpu
+  - vendor: jtekt
+    product: nano_2et
+  - vendor: jtekt
+    product: nano_10gx
+  - vendor: magzter
+    product: nano_digest
+```
+
+Update `monitoring.yaml` once you know the upstream identifiers:
 
 1. Search for the project on https://release-monitoring.org/ and copy the numeric `id`.
 2. Add an RSS or Atom feed URL if upstream publishes one; otherwise leave `rss: ~`.
 3. Check the National Vulnerability Database for a CPE string (https://nvd.nist.gov/products/cpe/search). If none exists, leave it as `~`.
+
+Using this information we can correctly identify the id as 2046 and that there is no rss feed or cpe string. The `monitoring.yaml` file should look like this:
 
 ```yaml
 releases:
   id: 2046           # Release Monitoring ID for nano
   rss: ~             # Replace when upstream publishes a feed
 security:
-  cpe: cpe:2.3:a:gnu:nano:*:*:*:*:*:*:*:*  # Update if upstream changes identifiers
+  cpe: ~             # Update if upstream changes identifiers
 ```
 
-## Build and test
+## Build and test the package
 
-From the recipe directory, run:
-
-```bash
-just build
-```
-
-This executes `boulder build …` with your `stone.yaml`. If the build fails, adjust the recipe, repeat the relevant step above, and rebuild until it succeeds. Finish by committing the new package on your feature branch and opening a pull request.
+Once you have made the relevant changes to the package, you will need to build it locally. Refer to the [Building and Testing packages](/packaging/workflow/building-and-testing-packages/) page on guidance of how to do this.

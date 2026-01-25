@@ -1,66 +1,40 @@
 ---
 title : 'Updating an existing package recipe'
-date : 2025-08-01T14:33:00+01:00
+lastUpdated: 2026-01-25T12:00:00+00:00
+description: "How to update an existing package recipe"
 ---
 import { Aside } from '@astrojs/starlight/components';
 
-This page details the process of updating a package that is already present in the [AerynOS repository](https://github.com/AerynOS/recipes).
+
+This guide details the process of updating a package that is already present in the [AerynOS repository](https://github.com/AerynOS/recipes). We will use GNU Nano as the running example, but the same steps apply to any existing package. 
 
 Before updating the package yourself, please double check that there isn't already an outstanding PR for the update you want to make. Please also check if someone has created an update request issue in the [AerynOS recipes repository](https://github.com/AerynOS/recipes).
 
-## Update your clone of the recipes repository
-Please refer to the [Basic Packaging Workflow](/packaging/workflow/basic-workflow/) on how to create and update your local clone of the AerynOS repository on your own system before proceeding any further.
+## Prepare your workspace
 
-As a reminder, you want to ensure you have the volatile repository enabled and fully updated on your system.
+Prior to starting, ensure you have followed the [prerequisites](/packaging/workflow/prerequisites/) set up process, the [Basic Packaging Workflow](/packaging/workflow/basic-workflow/) and updated your system in accordance with [Preparing for Packaging](/packaging/workflow/preparing-for-packaging/) guide. 
 
-For a recap, if you have followed the previous guide, the commands will be:
-
-```
-sudo moss repo enable volatile
-sudo moss sync -u
-gotoaosrepo
-git switch main
-gh repo sync yourusername/yourfork -b main
-git pull
-```
-
-Change `yourusername` to your github username and `yourfork` to the name you selected for your fork of the AerynOS repository. By default the fork is called `recipes`.
-
-## Switch to a new git branch
-
-When conducting any packaging work, it is a good idea to separate out your work in a different branch. This allows you to isolate changes you make from one package in a separate branch to changes you make to a different package in a second branch and so on. This additionally is helpful as it keeps your work separate to any underlaying changes made to the main recipes repository, more easily allowing you to rebase your work if needed.
-
-```
-git checkout -b update_packagename
-```
-
-Change "update_packagename" to whatever description you feel comfortable with.
-
-You can check what branch you are on and what branches you have in your repository with the following command:
-
-```
-git branch -a
-```
+If you have not done this, follow those steps first before proceeding.
 
 ## Simple updates to a package
 
-To update a package to a newer available version, navigate to the relevant folder within your local recipe repository on your system. If you have already navigated to the local recipe repository, then by way of example, to navigate to the nano package folder, you would use the command:
+To update a package to a newer available version, navigate to the relevant folder within your local recipe repository on your system. If you have already navigated to the local recipe repository, then by way of example, to navigate to the Nano package folder, you would use the command:
 
-```
+```bash
 chpkg nano
 ```
 
 ### Bumping a package
 
-If there are changes to dependencies of a package, but not to the package tiself, you need to increase the release number within the stone.yaml recipe file by one. This will allow you to rebuild the package and test it against the newer dependences to make sure everything is working. You can do this by using the following command:
+If there are changes to dependencies of a package, but not to the package itself, you need to increase the release number within the `stone.yaml` recipe file by one. This will allow you to rebuild the package and test it against the newer dependences to make sure everything is working. You can do this by using the following command:
 
-```
+```bash
 just bump
 ```
 
 which is a shortcut for
 
-```
+```bash
 boulder recipe bump
 ```
 
@@ -70,14 +44,14 @@ Please note each time you do this, you will increase the release number by one, 
 
 If you need to update the package version itself, you can use the following command:
 
-```
+```bash
 boulder recipe update --ver "version name" --upstream "upstream URL" stone.yaml -w
 ```
 
-In the example of nano, to update to version 8.5, you would use the following command:
+In the example of nano, to update to version 8.7, you would use the following command:
 
-```
-boulder recipe update --ver 8.5 --upstream https://www.nano-editor.org/dist/v8/nano-8.5.tar.xz stone.yaml -w
+```bash
+boulder recipe update --ver 8.7 --upstream https://www.nano-editor.org/dist/v8/nano-8.7.tar.xz stone.yaml -w
 ```
 
 This command does the following:
@@ -89,84 +63,8 @@ This command does the following:
 
 ## Wider updates to a package
 
-If there are missing dependencies or you need to make further changes to the stone.yaml recipe file, you can either use nano to make changes to the stone.yaml from within your terminal or you can use a code editor such as zed which is pre-installed on AerynOS. Guidance on how to make changes to a stone.yaml file are covered in the [Create a new package recipe](/packaging/workflow/creating-a-new-recipe/) page.
+If there are further changes required to the `stone.yaml` recipe file, you can either use a text editor (such as Nano itself) or a code editor (such as Zed which is pre-installed on AerynOS) to make changes those changes. Guidance on how to make changes to a stone.yaml file are covered in the [Creating a new package recipe](/packaging/workflow/creating-a-new-recipe/) page.
 
-## Build the package
+## Build and test the package
 
-Once you have made the relevant changes to the package, you will need to build it locally. Please ensure you have followed the steps above to enable the volatile repository. If you are only updating one package, you can either keep your local repository disabled prior to building the package, or if you prefer to keep it enabled, make sure there are no other packages indexed locally that could interfere with your new package build.
-
-The command to build the updated package is:
-
-```
-just build
-```
-
-If the package is successfully built, you will need to move it to your local repository. You can do this using the following command:
-
-```
-just mv-local
-```
-
-If you have not yet enabled the local repository, you do this with the following command:
-
-```
-sudo moss repo enable local
-```
-
-You will then need to sync the local repository using the command:
-
-```
-sudo moss sync -u
-```
-
-Note, if you already have an older version of the package installed, you will be asked if you want to update to the new local version you have just built. If you have not yet installed this package, you would install it as normal using the command:
-
-```
-sudo moss install "package name"
-```
-
-Once you have tested the package, you can make a submission for including the update in the repository.
-
-<Aside type="tip">
-  To find guidance on how to submit a pull request (PR), you can refer to our [submit a pull request](/packaging/workflow/submitting-a-pr) page.                    s
-</Aside>
-
-## Checking for updates
-
-To simplify update tracking for package maintainers, AerynOS provides a tool called **Ent**. Ent checks recipes against upstream sources to determine whether updates are available.
-
-Install Ent using `moss`:
-
-```bash
-sudo moss install ent
-```
-**How Ent works**
-
-Ent scans the current directory and all subdirectories beneath it. It inspects each recipe `monitoring.yaml` file and compares the referenced `stone.yaml` recipe upstreams to determine whether newer versions are available.
-
-Because Ent operates relative to the directory in which it is executed, you can control the scope of the update check by choosing where to run the command within the recipes repository.
-
-***Running update checks***
-
-To check for updates across all recipes, run the following command from the root of the recipes repository:
-
-```bash
-ent check updates
-```
-
-You can also run this command from more specific locations:
-
-* **Repository root**
-  Checks all recipes in the repository.
-
-* **Letter directory (for example, `f/`)**
-  Checks only recipes whose names start with that letter.
-
-* **Specific recipe directory (for example, `f/firefox/`)**
-  Checks only that single recipe.
-
-For example, running the command from `f/firefox/` will check only the Firefox recipe for available updates.
-
-<Aside type="note">
-    `ent` queries an upstream site for package release info *every time you run it*. Please be mindful of not running it gratuitously so as to remain a good ecosystem citizen.
-</Aside>
+Once you have made the relevant changes to the package, you will need to build it locally. Refer to the [Building and Testing packages](/packaging/workflow/building-and-testing-packages/) page on guidance of how to do this.

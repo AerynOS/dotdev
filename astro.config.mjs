@@ -144,9 +144,12 @@ export default defineConfig({
                 { slug: "packaging/workflow" },
                 { slug: "packaging/workflow/prerequisites" },
                 { slug: "packaging/workflow/basic-workflow" },
+                { slug: "packaging/workflow/preparing-for-packaging" },
                 { slug: "packaging/workflow/creating-a-new-recipe" },
                 { slug: "packaging/workflow/updating-an-existing-recipe" },
+                { slug: "packaging/workflow/building-and-testing-packages" },
                 { slug: "packaging/workflow/submitting-a-pr" },
+                { slug: "packaging/workflow/checking-for-updates" },
               ],
             },
             {
