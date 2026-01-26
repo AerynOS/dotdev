@@ -1,6 +1,6 @@
 ---
 title: 'Overview'
-lastUpdated: 2024-09-07T23:44:13Z
+lastUpdated: 2026-01-26T09:00:00Z
 description: Introduction to the `stone.yaml` format
 ---
 
@@ -13,15 +13,26 @@ How might a `stone.yml` look like for a very trivial package, such as the [Nano 
 
 ```yaml
 name        : nano
-version     : 5.5
-release     : 2
-summary     : GNU Text Editor
-license     : GPL-3.0-or-later
+version     : 8.7
+release     : 38
 homepage    : https://www.nano-editor.org/
-description : |
-    The GNU Text Editor
 upstreams   :
-    - https://www.nano-editor.org/dist/v5/nano-5.5.tar.xz: 390b81bf9b41ff736db997aede4d1f60b4453fbd75a519a4ddb645f6fd687e4a
+    - https://www.nano-editor.org/dist/v8/nano-8.7.tar.xz : afd287aa672c48b8e1a93fdb6c6588453d527510d966822b687f2835f0d986e9
+summary     : GNU Text Editor
+description : |
+    Nano is a small and simple text editor for use on the terminal.
+    It copied the interface and key bindings of the Pico editor but
+    added several missing features: undo/redo, syntax highlighting,
+    line numbers, softwrapping, multiple buffers, selecting text by
+    holding Shift, search-and-replace with regular expressions, and
+    several other conveniences.
+license     :
+    - GPL-3.0-or-later
+builddeps   :
+    - binary(msgfmt)
+    - pkgconfig(libmagic)
+    - pkgconfig(ncursesw)
+    - pkgconfig(zlib)
 setup       : |
     %configure
 build       : |
