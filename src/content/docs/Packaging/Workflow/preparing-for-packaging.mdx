@@ -1,0 +1,40 @@
+---
+title: 'Preparing for packaging'
+lastUpdated: 2026-01-25T12:00:00+00:00
+description: "Preparing for packaging on AerynOS"
+---
+import { Aside } from '@astrojs/starlight/components';
+
+
+This page details prerequisite steps required before either creating a new package recipe or updating an existing package recipe. If you have not yet followed the [prerequisites](/packaging/workflow/prerequisites/) steps and [Basic Packaging Workflow](/packaging/workflow/basic-workflow/), follow those steps first before proceeding.
+
+## Update your clone of the recipes repository
+
+As a reminder, you want to ensure you have the volatile repository enabled and fully updated on your system.
+
+Whilst all the information can be found in the prior pages, to recap, the commands will be:
+
+```bash
+sudo moss repo enable volatile
+sudo moss sync -u
+gotoaosrepo
+git switch main
+gh repo sync yourusername/yourfork -b main
+git pull
+```
+
+## Switch to a new git branch
+
+When conducting any packaging work, it is a good idea to separate out your work in a different branch. This allows you to isolate changes you make from one package in a separate branch to changes you make to a different package in a second branch and so on. This additionally is helpful as it keeps your work separate to any underlaying changes made to the `main` recipes repository, more easily allowing you to rebase your work if needed.
+
+```bash
+git checkout -b "branch-name"
+```
+
+Change "branch-name" to whatever description you feel comfortable with. Our general convention is to use the format `add-packagename` or `update-packagename` depending on whether you are adding a new package or updating an existing one.
+
+You can check what branch you are on and what branches you have in your repository with the following command:
+
+```bash
+git branch -a
+```
