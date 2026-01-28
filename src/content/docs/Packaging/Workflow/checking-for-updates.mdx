@@ -1,0 +1,48 @@
+---
+title : 'Checking for package updates'
+lastUpdated: 2026-01-25T12:00:00+00:00
+description: "How to check for package updates"
+---
+import { Aside } from '@astrojs/starlight/components';
+
+
+## Use `ent` to check for package updates
+
+This guide will walk you through the process using `ent`, a tool built by the AerynOS team to check for package updates. `ent` checks recipes against upstream sources to determine whether updates are available.
+
+`ent` is not installed on your system by default. To install `ent` using `moss`, use the following command:
+
+```bash
+sudo moss install ent
+```
+### How `ent` works
+
+`ent` scans the current directory and all subdirectories beneath it. It inspects each recipe `monitoring.yaml` file and compares the referenced `stone.yaml` recipe upstreams to determine whether newer versions are available.
+
+Because `ent` operates relative to the directory in which it is executed, you can control the scope of the update check by choosing where to run the command within the recipes repository.
+
+### Running update checks
+
+To check for updates across all recipes, run the following command from the root of the recipes repository:
+
+```bash
+gotoaosrepo
+ent check updates
+```
+
+You can also run this command from more specific locations:
+
+* **Repository root**
+  Checks all recipes in the repository.
+
+* **Letter directory (for example, `f/`)**
+  Checks only recipes whose names start with that letter.
+
+* **Specific recipe directory (for example, `f/firefox/`)**
+  Checks only that single recipe.
+
+For example, running the command from `f/firefox/` will check only the Firefox recipe for available updates.
+
+<Aside type="note" title="What is ent?">
+    `ent` queries an upstream site for package release info *every time you run it*. Please be mindful of not running it gratuitously so as to remain a good ecosystem citizen.
+</Aside>
