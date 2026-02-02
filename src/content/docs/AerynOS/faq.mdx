@@ -14,7 +14,7 @@ import { Aside } from "@astrojs/starlight/components";
 
 ### What does AerynOS mean and how do I pronounce it?
 
-AerynOS is a stylised spelling of "Erin", alluding to the project's Irish roots. It is pronounced exactly the same as "Erin" - "AIR-in" OS. It's also a play on "aer" and the phonetic "air" sound, indicative of our desire to produce an open, trusted and high-performance operating system.
+AerynOS is a stylized spelling of "Erin", alluding to the project's Irish roots. It is pronounced exactly the same as "Erin" - "AIR-in" OS. It's also a play on "aer" and the phonetic "air" sound, indicative of our desire to produce an open, trusted and high-performance operating system.
 
 It's pronounced as "AIR-in" OS.
 
@@ -36,7 +36,7 @@ Checking the currently supported x86_64 psABI feature level of a system can be d
 
 ### Does AerynOS offer NVIDIA GPU support?
 
-Due to the way NVIDIA distributes its drivers, maintaining them in a distro is labour intensive and frustrating when they do not work as advertised.
+Due to the way NVIDIA distributes its drivers, maintaining them in a distro is labor-intensive and frustrating when they do not work as advertised.
 
 Given AerynOS is in the Alpha development stage, only limited, best effort NVIDIA enablement related to cards supported by the so-called nvidia-open-gpu-kernel-modules is currently offered.
 
@@ -55,12 +55,12 @@ You have been warned.
 In practice, we recommend that you install AerynOS to a separate drive with:
 
 - A >=256MB ESP FAT32 partition (type 1 in fdisk).
-  -   This must be manually formatted for the installer to recognise it.
+  -   This must be manually formatted for the installer to recognize it.
 - A 4GB XBOOTLDR FAT32 partition (type 142 in fdisk, bls_boot in gparted).
-  - This must be manually formatted for the installer to recognise it.
+  - This must be manually formatted for the installer to recognize it.
   - This partition is large, because it is where the AerynOS kernel+initramfs and (in the future) rescue image files will be saved.
 - A >20 GB system xfs partition
-  - This must be manually formatted for the installer to recognise it.
+  - This must be manually formatted for the installer to recognize it.
   - The larger the xfs system (/ or root) partition is, the more OS /usr directory rollback states it can support in /.moss/.
 
 ```
@@ -88,7 +88,7 @@ nvme1n1
 ermo@virgil:~
 ```
 
-NB: Remember, there is nothing stopping you from creating an extra partition, formatting it with a filesystem of your choice, and then configuring /etc/fstab to mount it as /home after AerynOS has been installed, if you want to use a different filesystem than xfs for your /home folders for whatever reason.
+NB: Remember, there is nothing stopping you from creating an extra partition, formatting it with a filesystem of your choice, and then configuring /etc/fstab to mount it as /home after AerynOS has been installed. You can do this if you want to use a different filesystem than xfs for your /home folders for whatever reason.
 
 ### Why do you recommend the xfs filesystem for the root partition?
 
@@ -163,19 +163,19 @@ Tack on ```--help``` to see the options for prune.
 
 See the [blsforme repo readme](https://github.com/AerynOS/blsforme/?tab=readme-ov-file#filesystem-layout) for the expected format.
 
-Typically, it is necessary to change the installed system state with ```moss``` for command-line snippets to take effect.
+Typically, it is necessary to change the installed system state with `moss` for command-line snippets to take effect.
 
-One way of doing that is to do a ```sudo moss remove nano -y && sudo moss install nano -y```, followed by ```sudo moss boot status``` to check if the new cmdline snippet is now active.
+One way of doing that is to do a `sudo moss remove nano -y && sudo moss install nano -y`, followed by `sudo moss boot status` to check if the new cmdline snippet is now active.
 
 # Package Questions
 
 ### How come your package repository is so small?
 
-We are still in heavy development ("Alpha") and are developing our back end and associated automated rebuild processes.
+We are still in heavy development ("Alpha") and are developing our backend and associated automated rebuild processes.
 
 If we discover that it is necessary for us to rebuild our entire repository, we would like the ability to do so in the span of an afternoon (using multiple builders in parallel).
 
-Once our back end story and our automated rebuild process story are both further advanced, we will begin scaling out the repository to contain more packages.
+Once our backend story and our automated rebuild process story are both further advanced, we will begin scaling out the repository to contain more packages.
 
 ### Could you package (...) please?
 
@@ -210,17 +210,17 @@ AerynOS has been bootstrapped and built from scratch and is not based on any oth
 
 This implies that AerynOS has its own:
 
-- package manager (```moss```)
-- package build tool (```boulder```)
+- package manager (`moss`)
+- package build tool (`boulder`)
 - build pipeline consisting of:
-  - the package build dashboard and controller (```summit```)
-  - the builder-as-a-service middleware (```avalanche```)
-  - the package repository manager (```vessel```)
+  - the package build dashboard and controller (`summit`)
+  - the builder-as-a-service middleware (`avalanche`)
+  - the package repository manager (`vessel`)
 
 This also implies that AerynOS does NOT build upon or use either:
 
-- ```.rpm``` related tooling from Red Hat
-- ```.deb``` related tooling from the Debian Project
+- `.rpm` related tooling from Red Hat
+- `.deb` related tooling from the Debian Project
 - Arch-related tooling
 
 ### When will AerynOS be considered stable?
@@ -229,4 +229,4 @@ AerynOS is taking on the ambitious task of creating a distribution from scratch,
 
 As such, there is no official ETA.
 
-Now that the project has hit alpha status, you will see more frequent updates and progress reports.
+Now that the project has hit alpha status, you will see frequent updates and progress reports.

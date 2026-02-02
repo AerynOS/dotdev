@@ -24,14 +24,11 @@ Could generate `zlib`, `zlib-devel`, `zlib-dbginfo`, etc.
 
 ### `version`
 
-This string tells users what version they are using, and isn't used at all for any kind of version comparison logic in the tooling. It is
-essentially a freeform string. It **should** be identical to the upstream identifier so that we can detect new releases automatically of the
-source project.
+This string tells users what version they are using, and isn't used at all for any kind of version comparison logic in the tooling. It is essentially a freeform string. It **should** be identical to the upstream identifier so that we can detect new releases automatically of the source project.
 
 ### `release`
 
-A monotonically incrementing integer. This field is bumped whenever we need to issue a new build ("release") of a package as an update to users.
-Without incrementing this field, no build is scheduled.
+A monotonically incrementing integer. This field is bumped whenever we need to issue a new build ("release") of a package as an update to users. Without incrementing this field, no build is scheduled.
 
 ### `homepage`
 

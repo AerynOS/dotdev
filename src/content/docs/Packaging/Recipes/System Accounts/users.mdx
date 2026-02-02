@@ -25,8 +25,7 @@ Within the package tree `./pkg` add `gdm.user`:
 }
 ```
 
-Note that these are the minimum required set of fields, and `disposition` should always be set to `system`. Also note that
-`homeDirectory` may need setting for some packages.
+Note that these are the minimum required set of fields, and `disposition` should always be set to `system`. Also note that `homeDirectory` may need setting for some packages.
 
 In your recipe's `install` section, you must install the file by username *and* by uid to the `%(libdir)/userdb` directory:
 
