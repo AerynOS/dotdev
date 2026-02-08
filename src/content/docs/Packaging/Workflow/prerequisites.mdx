@@ -10,8 +10,7 @@ installed, and a new directory for storing local build artifacts needs to be set
 
 ## Installing the `build-essential` package
 
-We maintain a `build-essential` metapackage that should contain the basics for getting started
-with packaging on AerynOS.
+We maintain a `build-essential` metapackage that should contain the basics for getting started with packaging on AerynOS.
 
 ```bash
 sudo moss sync -u
@@ -21,8 +20,7 @@ sudo moss it build-essential
 
 ## Activating the AerynOS helper scripts
 
-The easiest way to create a local repository is to use the helper script distributed with the
-AerynOS recipe repository in the `tools/` directory.
+The easiest way to create a local repository is to use the helper script distributed with the AerynOS recipe repository in the `tools/` directory.
 
 Start by cloning the recipes/ git repository:
 
@@ -47,8 +45,7 @@ cd ~
 gotoaosrepo
 ```
 
-If the helpers script has been correctly loaded, the `gotoaosrepo` command should switch to
-the directory containing the recipes/ git repository clone.
+If the helpers script has been correctly loaded, the `gotoaosrepo` command should switch to the directory containing the recipes/ git repository clone.
 
 
 ### Setting up git hooks and linters
@@ -93,8 +90,7 @@ Edit your `~/.gitconfig` file to contain the following:
 
 ## Adding /etc/subuid and /etc/subgid entries
 
-Since `boulder` uses user-namespaces to set up isolated build roots, it is necessary to set up
-a subuid and a subgid file for the relevant users first:
+Since `boulder` uses user-namespaces to set up isolated build roots, it is necessary to set up a subuid and a subgid file for the relevant users first:
 
 ```bash
 sudo touch /etc/sub{uid,gid}

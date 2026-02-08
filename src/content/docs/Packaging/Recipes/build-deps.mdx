@@ -4,16 +4,13 @@ description: "Build dependency types"
 lastUpdated: 2024-09-07T23:52:00Z
 ---
 
-Every build of a recipe by `boulder` will create an entirely new root, with only the absolute minimum support dependencies in place.
-In order to build most software, you will need to add to the `builddeps` key in `stone.yml`. Luckily, our tooling supports more than
-one kind of dep.
+Every build of a recipe by `boulder` will create an entirely new root, with only the absolute minimum support dependencies in place. In order to build most software, you will need to add to the `builddeps` key in `stone.yml`. Luckily, our tooling supports more than one kind of dependency.
 
 Note that AerynOS packages are also capable of storing **providers** that make the following kinds of dependencies work.
 
 ## `$name` - standard deps
 
-Simply listing a name will create a dependency on that package name. This is discouraged as automatically resolved providers offer a
-far more resilient system.
+Simply listing a name will create a dependency on that package name. This is discouraged as automatically resolved providers offer a far more resilient system.
 
 ```yaml
 builddeps:

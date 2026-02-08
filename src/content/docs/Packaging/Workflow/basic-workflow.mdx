@@ -4,47 +4,35 @@ lastUpdated: 2025-06-23T00:00:00Z
 description: "Building packages locally and testing them"
 ---
 
-Once the [prerequisites](/packaging/workflow/prerequisites/) have been handled, it is time to learn how to install
-newly built local moss-format `.stone` packages.
+Once the [prerequisites](/packaging/workflow/prerequisites/) have been handled, it is time to learn how to install newly built local moss-format `.stone` packages.
 
 
 ## Understanding moss-format repositories
 
-When building and testing packages locally, boulder (and moss) can be configured to consult a local
-moss-format repository containing moss-format `.stone` packages and a `stone.index` local repository
-index.
+When building and testing packages locally, boulder (and moss) can be configured to consult a local moss-format repository containing moss-format `.stone` packages and a `stone.index` local repository index.
 
 ### `stone.index` files
 
-The `stone.index` file is what both moss and boulder consult when they check which packages are
-available to be installed into moss-maintained system roots.
+The `stone.index` file is what both moss and boulder consult when they check which packages are available to be installed into moss-maintained system roots.
 
-Adding a moss-format repository is as simple as registering a new location from where to fetch
-`stone.index` files, which will be shown in detail later on this page.
+Adding a moss-format repository is as simple as registering a new location from where to fetch `stone.index` files, which will be shown in detail later on this page.
 
 ### `moss` build roots
 
-Every time a package is built, `boulder` calls out to `moss` to have it construct a pristine build root
-directory (called a 'buildroot') with the necessary package build prerequisites installed.
+Every time a package is built, `boulder` calls out to `moss` to have it construct a pristine build root directory (called a 'buildroot') with the necessary package build prerequisites installed.
 
-The packages in this buildroot are resolved from one or more moss `stone.index` files, sorted in
-descending priority, such that the highest priority repository "wins" when package providers are
-resolved.
+The packages in this buildroot are resolved from one or more moss `stone.index` files, sorted in descending priority, such that the highest priority repository "wins" when package providers are resolved.
 
-The lowest priority repository will typically be the official AerynOS upstream package
-repository.
+The lowest priority repository will typically be the official AerynOS upstream package repository.
 
-If higher priority repositories are added, packages from these will in turn override the packages
-available in the official AerynOS upstream package repository.
+If higher priority repositories are added, packages from these will in turn override the packages available in the official AerynOS upstream package repository.
 
-The next section deals with how to create and register a higher priority local moss-format
-repository, which is colloquially referred to as a "local repo".
+The next section deals with how to create and register a higher priority local moss-format repository, which is colloquially referred to as a "local repo".
 
 
 ## Creating a local repository
 
-After the helper script has been activated in `bash`, open a new tab or a new terminal, and execute
-the following commands:
+After the helper script has been activated in `bash`, open a new tab or a new terminal, and execute the following commands:
 
 ```bash
 # create a new tab or open a new terminal
@@ -53,14 +41,12 @@ just create-local
 just index-local
 ```
 
-The `just create-local` invocation will set up an empty `~/.cache/local_repo/x86_64/` directory,
-and the `just index-local` invocation will create a `stone.index` file for the directory.
+The `just create-local` invocation will set up an empty `~/.cache/local_repo/x86_64/` directory, and the `just index-local` invocation will create a `stone.index` file for the directory.
 
 
 ### Making boulder use the local repository
 
-Boulder will need to have its list of "build profiles" be updated before it will consult the
-`~/.cache/local_repo/x86_64/stone.index` moss-format repository index created above:
+Boulder will need to have its list of "build profiles" be updated before it will consult the `~/.cache/local_repo/x86_64/stone.index` moss-format repository index created above:
 
 ```bash
 boulder profile list
@@ -128,21 +114,14 @@ moss repo list
 
 #### Package resolution order
 
-In the above priority tower, each moss-format package would first get resolved via the `local`
-repository (priority 100), then from the `volatile` repository (priority 10), and finally from the
-`unstable` repository (priority 0), the latter of which is the official upstream AerynOS
-moss-format `.stone` package repository.
+In the above priority tower, each moss-format package would first get resolved via the `local` repository (priority 100), then from the `volatile` repository (priority 10), and finally from the `unstable` repository (priority 0). The latter of which is the official upstream AerynOS moss-format `.stone` package repository.
 
 
 #### Disabling moss-format repositories
 
-Users of AerynOS should generally _not_ have the `volatile` repository be enabled, because this
-repository is where new `.stone` packages land right after being built, which means the repository
-can potentially be in an undefined and volatile state when building large build queues (hence the
-name).
+Users of AerynOS should generally _not_ have the `volatile` repository be enabled, because this repository is where new `.stone` packages land right after being built. This means the repository can potentially be in an undefined and volatile state when building large build queues (hence the name).
 
-Therefore, it can be useful to disable moss-format repositories without deleting their definitions
-from the local system:
+Therefore, it can be useful to disable moss-format repositories without deleting their definitions from the local system:
 
 ```bash
 sudo moss repo disable volatile 
@@ -157,12 +136,9 @@ moss repo list
 
 #### Enabling moss-format repositories
 
-However, when testing locally built packages, they _must_ be built against the `local-x86_64`
-boulder build profile, which in turns relies on the `volatile` repository via the boulder
-`local-x86_64` build profile.
+However, when testing locally built packages, they _must_ be built against the `local-x86_64` boulder build profile, which in turns relies on the `volatile` repository via the boulder `local-x86_64` build profile.
 
-Hence, when testing locally built packages, you may need to _**temporarily**_ enable the `volatile`
-repository for moss to resolve from.
+Hence, when testing locally built packages, you may need to _**temporarily**_ enable the `volatile` repository for moss to resolve from.
 
 ```bash
 sudo moss repo enable volatile 
@@ -200,8 +176,7 @@ just ls-local
 
 Note that the basic packaging workflow in AerynOS assumes that you are using a local repository.
 
-If you are building multiple package recipes, you will need to `just build` and `just mv-local`
-for each package recipe sequentially.
+If you are building multiple package recipes, you will need to `just build` and `just mv-local` for each package recipe sequentially.
 
 
 ## Updating the installed system state
@@ -220,8 +195,7 @@ Testing your package(s) is now as simple as:
 
 ## Cleaning the local repository
 
-Often, it will be prudent to clean out the local repository after the associated recipe PR has been
-accepted upstream.
+Often, it will be prudent to clean out the local repository after the associated recipe PR has been accepted upstream.
 
 ```bash
 gotoaosrepo
@@ -231,16 +205,12 @@ sudo moss repo disable local
 sudo moss sync -u 
 ```
 
-This will sync the the local system to a new installed system state made only from the upstream
-`unstable` moss-format `.stone` package repository state.
+This will sync the the local system to a new installed system state made only from the upstream `unstable` moss-format `.stone` package repository state.
 
-This will effectively make the new system state "forget" the nano version installed from the local
-repository in the previous system state.
+This will effectively make the new system state "forget" the nano version installed from the local repository in the previous system state.
 
 ## Ending notes
 
-If you have made it this far, congratulations! You should now understand the basic workflow of
-packaging and managing repositories with AerynOS.
+If you have made it this far, congratulations! You should now understand the basic workflow of packaging and managing repositories with AerynOS.
 
-Tip: execute `just -l` to see a list of supported `just` 'recipes', which are common actions that
-     have been automated by the AerynOS developers.
+Tip: execute `just -l` to see a list of supported `just` 'recipes', which are common actions that have been automated by the AerynOS developers.

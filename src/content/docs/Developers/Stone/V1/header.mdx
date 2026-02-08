@@ -4,8 +4,7 @@ lastUpdated: 2025-03-28T05:28:00Z
 description: The v1 header of the stone format
 ---
 
-The v1 header contains 3 fields to denote the type of the `.stone` file as well as a count
-of the payloads. These are contained within the 24-byte `data` field of the agnostic header.
+The v1 header contains 3 fields to denote the type of the `.stone` file as well as a count of the payloads. These are contained within the 24-byte `data` field of the agnostic header.
 
 ## Fields
 
@@ -17,9 +16,7 @@ of the payloads. These are contained within the 24-byte `data` field of the agno
 
 ## The padding check
 
-While building the stone format, we built-in the `.data` field to permit future extensions in subsequent
-stone versions. As of v1, the `.padding_chk` field contains a statically initialised array as a mild corruption
-check.
+While building the stone format, we built-in the `.data` field to permit future extensions in subsequent stone versions. As of v1, the `.padding_chk` field contains a statically initialized array as a mild corruption check.
 
 ```rust
 const INTEGRITY_CHECK: [u8; 21] = [
