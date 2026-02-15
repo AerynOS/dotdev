@@ -1,0 +1,36 @@
+---
+title: AerynOS Features
+lastUpdated: 2026-01-15T12:25:00Z
+description: How to use the key features of AerynOS
+---
+
+# Usage Questions
+
+### How do I make my system check for updates and install them?
+
+```sudo moss sync -u```
+
+This is a short hand form of:
+
+```
+# update the local systems "view" of which packages are available
+sudo moss repo update
+# synchronise the installed state against the list of available packages
+sudo moss sync
+```
+
+### How do I access the rollback feature at boot?
+
+Hold down or mash your Space key repeatedly after your computer starts up.
+
+### How do I verify the integrity of my install states in AerynOS?
+
+```sudo moss state verify```
+
+Tack on ```--help``` to see the options for verify.
+
+### How do I clean out older install states in AerynOS?
+
+```sudo moss state prune```
+
+Tack on ```--help``` to see the options for prune.
