@@ -4,67 +4,43 @@ lastUpdated: 2024-09-10T23:43:21+08:00
 description: Creating a live environment to boot into and run the AerynOS installer
 ---
 
-## Creating a Bootable USB Drive
-
 import { Aside } from '@astrojs/starlight/components';
 
+# Creating a Bootable USB Drive
+
+## Prerequisites
+
+- Instructions for [Downloading AerynOS](/users/getting-started/downloading/).
+- You will need a spare USB drive that you don't mind wiping.
+
+## Option 1: Using Ventoy on a USB drive
+
+Ventoy is an open source tool to create bootable USB drives that can boot multiple operating systems by placing their respective ISO files on the USB drive. This flexibility is particularly useful as it allows users to have a single USB drive for installation of multiple operating systems. Support for AerynOS was added in version [1.1.10](https://www.ventoy.net/en/doc_news.html).
+
+Ventoy has several options for creating a bootable USB drive. These instructions with vary depending on your current OS. You can find the instructions for creating a bootable Ventoy USB drive on the [Ventoy website](https://www.ventoy.net/en/doc_start.html).
+
+1. Follow the instructions for creating a bootable Ventoy USB drive.
+2. Copy the latest AerynOS ISO to the root directory of the "Ventoy" drive
+
+## Option 2: Preparing an install medium using Etcher
+
+1. Download the latest version of [Balena Etcher](https://etcher.balena.io/) for your OS.
+2. Launch the application
+3. Seelct the latest AerynOS ISO you have already downloaded
+4. Select the inserted USB stick
+5. Flash!
+6. Ensure the USB drive is properly ejected after flashing the ISO to avoid data corruption.
+
 <Aside type="danger">
-Creating a bootable USB drive will erase all data on the USB drive. Make sure to back up any important data before proceeding.
+Creating a bootable USB drive using Etcher will erase all data on the USB drive. Make sure to back up any important data before proceeding.
 </Aside>
 
-<Aside type="caution">
-Ensure the USB drive is properly ejected after flashing the ISO to avoid data corruption.
-</Aside>
+### Alternative options
 
-You'll need your USB drive and the ISO file downloaded from the [AerynOS download page](https://download.AerynOS.com).
+There are several alternative options that can be used for creating a bootable USB drive. These include, but are not limited to:
 
-### Linux
+- **Rufus**: A free and open-source tool for Windows that can create bootable USB drives.
+- **dd**: A Linux command-line utility that can be used to create bootable USB drives from the command line.
+- **GNOME Disks**: A graphical tool that can be used to create bootable USB drives on Linux.
 
-1. Insert your USB drive into an available USB port on your machine.
-2. Open a terminal window and navigate to the directory where the ISO file is located.
-
-```bash
-cd ~/Downloads
-```
-
-3. Identify the device name of your USB drive by running the following command:
-
-```bash
-lsblk
-```
-
-Look for the device name of your USB drive, it will be something like `/dev/sdX` where `X` is a letter representing the device.
-
-<Aside type="caution">
-Do not confuse this with the partition name, which will be something like `/dev/sdX1`.
-</Aside>
-
-4. Now run the following command to write the ISO file to the USB drive:
-
-<Aside type="caution">
-Ensure you are using the correct device name for your USB drive to avoid data loss.
-</Aside>
-
-<Aside type="note">
-This may take some time to complete depending on the size of the ISO file and the speed of your USB drive.
-</Aside>
-
-```bash
-sudo dd if=aerynos-<version>.iso of=/dev/sdX bs=4M conv=fsync oflag=direct status=progress
-```
-
-This command will write the ISO file to the USB drive and you'll see a progress indicator as it completes.
-
-5. To ensure the write process has completed successfully, run the following command:
-
-```bash
-sudo sync
-```
-
-Once the command has run, you can safely remove the USB drive from your machine.
-
-### Windows
-
-1. Insert your USB drive into an available USB port on your machine.
-2. Download and install [Rufus](https://rufus.ie/), a free and open-source tool for creating bootable USB drives.
-3. **TODO**: Add steps for using Rufus to create a bootable USB drive.
+You can find instructions for these various options online via your favorite search engine.

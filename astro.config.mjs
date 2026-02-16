@@ -100,12 +100,9 @@ export default defineConfig({
                 { slug: "users/getting-started" },
                 { slug: "users/getting-started/requirements" },
                 { slug: "users/getting-started/downloading" },
-                {
-                  slug: "users/getting-started/creating-the-live-enviroment",
-                },
-                {
-                  slug: "users/getting-started/booting-the-live-environment",
-                },
+                { slug: "users/getting-started/creating-the-live-enviroment" },
+                { slug: "users/getting-started/booting-the-live-environment" },
+                { slug: "users/getting-started/installing-aerynos" },
               ],
             },
             {

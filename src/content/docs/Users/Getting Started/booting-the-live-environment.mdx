@@ -8,21 +8,19 @@ import { Aside } from '@astrojs/starlight/components';
 
 ## Booting from a USB Drive
 
-<Aside type="note">
-Ensure that your system is set to boot from the USB drive. You may need to access the boot menu to select the USB drive as the boot device.
-</Aside>
-
 <Aside type="caution">
 Currently NVIDIA Drivers are not implemented by the live environment and will fallback to nouveau drivers.
 </Aside>
 
 1. Insert the bootable USB drive into your system and boot from the USB drive.
-2. You should see the AerynOS boot process, and you will be presented with the live environment.
+2. Adjust or override your BIOS settings to boot from the USB drive.
+3. You should see the AerynOS boot process, and you will be presented with the live environment.
+4. **If utilizing Ventoy** select the AerynOS ISO file to boot from.
 
 ## Testing the Live Environment
 
 <Aside type="tip">
-The live environment may run slower than the installed system due to the limitations of running from a USB drive.
+For a representative experience, you will need to install AerynOS. The live environment will run slower than an installed system due to the limitations of running from a USB drive.
 </Aside>
 
 Once you have booted into the live environment, you can test AerynOS without installing it on your system.

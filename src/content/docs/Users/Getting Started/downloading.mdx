@@ -8,23 +8,16 @@ import { Aside } from '@astrojs/starlight/components';
 
 ## Downloading the ISO
 
-1. Visit the [AerynOS download page](https://download.aerynos.com).
-2. Look for the latest release available for download, the official ISO files are named `AerynOS-<version>-<desktop>-<architecture>.iso`.
-
-  <Aside>
-  There may be multiple versions available with different desktop environments denoted by `AerynOS-<version>-<desktop>-<architecture>.iso` where `<desktop>` is the desktop environment.
-  </Aside>
-
-3. Click on the download link to start downloading the ISO file and associated checksums denoted by `AerynOS-<version>-<desktop>-<architecture>.iso.sha256sum`.
-
-Once the download is complete, you can proceed with creating a bootable USB drive or burning the ISO to a DVD to install AerynOS on your machine.
+1. Visit the [AerynOS download page](https://aerynos.com/download/).
+2. Use the direct download or bittorrent option to get the latest release.
+3. Download the checksum file
 
 ## Verifying the Checksums
 
-Before creating a bootable USB drive or burning the ISO to a DVD, it's important to verify the checksums to ensure the integrity of the downloaded ISO file.
+Before creating a bootable USB drive, it's important to verify the checksums to ensure the integrity of the downloaded ISO file.
 
-<Aside type="caution">
-  Using the ISO file without verifying the checksums can lead to boot failures, installation issues, and potential security risks.
+<Aside type="tip">
+    AerynOS utilizes a GNOME based live environment for installation. Our installer `lichen` is a netinstaller that can be used to install GNOME, KDE Plasma, Cosmic or a terminal-only environment based on your requirements.
 </Aside>
 
 ### Linux
@@ -38,13 +31,12 @@ cd ~/Downloads
 2. Run the following command to verify the checksums:
 
 ```bash
-
 sha256sum -c <checksum_file>
 ```
 You should see a message indicating that the checksums match if the ISO file is valid.
 
 ```bash
-AerynOS-2025.03-GNOME-x86_64.iso: OK
+AerynOS-2026.01-GNOME-live-x86_64.iso: OK
 ```
 
 If the checksums do not match, download the ISO file again and repeat the verification process.
