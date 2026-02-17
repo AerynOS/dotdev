@@ -15,14 +15,12 @@ AerynOS is currently only compiled for the x86-64-v2 target architecture, which 
 Checking the currently supported x86-64 psABI feature level of a system can be done by typing the following command in a terminal as a normal user:
 
 ```
-/usr/lib64/ld-linux-x86-64.so.2 --help | grep "x86-64"
+/usr/lib64/ld-linux-x86-64.so.2 --help | grep "x86-64-"
 ```
 
 On an x86-64-v2 based system, you will see the following output:
 
 ```
-Usage: /usr/lib64/ld-linux-x86-64.so.2 [OPTION]... EXECUTABLE-FILE [ARGS-FOR-PROGRAM...]
-This program interpreter self-identifies as: /usr/lib/ld-linux-x86-64.so.2
   x86-64-v4
   x86-64-v3
   x86-64-v2 (supported, searched)
