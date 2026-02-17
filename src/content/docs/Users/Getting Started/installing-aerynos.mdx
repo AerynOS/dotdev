@@ -12,8 +12,8 @@ For the easiest experience, we recommend using gparted which is included in the 
 
 1. Load up gparted from the live environment.
 2. Create a gpt partition table on the drive you want to install AerynOS on.
-3. Create a 256mb fat32 partition for esp with the boot and esp flags
-4. Create a 4gb fat32 partition for xbootldr with the bls_boot flag
+3. Create a >=256mb FAT32 partition for ESP with the boot and esp flags
+4. Create a 4gb FAT32 partition for XBOOTLDR with the bls_boot flag
 5. Utilize the rest of the space for a xfs root partition
 
 Once you have finished, your partition layout should look like this:
@@ -22,7 +22,7 @@ Once you have finished, your partition layout should look like this:
 
 ## Install AerynOS
 
-Open up a terminal and run the following command to install AerynOS:
+From the app menu, select the "Install AerynOS" option. This is a shortcut to opening a terminal and running the following command:
 
 ```bash
 sudo lichen
@@ -32,7 +32,7 @@ Follow the instructions on the screen to complete your installation. You will be
 
 1. Location
 2. Timezone
-3. Partition for esp (and optionally xbootldr)
+3. Partition for ESP (and optionally XBOOTLDR)
 4. Partition for root
 5. Admin password
 6. User name
