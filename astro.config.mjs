@@ -86,8 +86,19 @@ export default defineConfig({
             { slug: "aerynos" },
             { slug: "aerynos/overview" },
             { slug: "aerynos/philosophy" },
-            { slug: "aerynos/faq" },
             { slug: "aerynos/contribute" },
+          ],
+        },
+        {
+          label: "FAQ",
+          items: [
+            { slug: "faq" },
+            { slug: "faq/installation" },
+            { slug: "faq/filesystems" },
+            { slug: "faq/aerynos-features" },
+            { slug: "faq/general-faq" },
+            { slug: "faq/socials" },
+            { slug: "faq/lacking-features" },
           ],
         },
         {

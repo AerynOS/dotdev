@@ -1,0 +1,89 @@
+---
+title: Installation FAQ
+lastUpdated: 2026-01-15T12:25:00Z
+description: Installation FAQ for AerynOS
+---
+
+import { Aside } from "@astrojs/starlight/components";
+
+# Installation Questions
+
+### Which CPUs does AerynOS support?
+
+AerynOS is currently only compiled for the x86-64-v2 target architecture, which means that it will run on CPUs supporting x86-64-v2 or greater psABI feature levels.
+
+Checking the currently supported x86-64 psABI feature level of a system can be done by typing the following command in a terminal as a normal user:
+
+```
+/usr/lib64/ld-linux-x86-64.so.2 --help | grep "x86-64"
+```
+
+On an x86-64-v2 based system, you will see the following output:
+
+```
+Usage: /usr/lib64/ld-linux-x86-64.so.2 [OPTION]... EXECUTABLE-FILE [ARGS-FOR-PROGRAM...]
+This program interpreter self-identifies as: /usr/lib/ld-linux-x86-64.so.2
+  x86-64-v4
+  x86-64-v3
+  x86-64-v2 (supported, searched)
+```
+
+<Aside type="note">
+    If the x86-64-v3 and x86-64-v4 psABI feature levels were supported, they would also show `(supported, searched)` next to them. AerynOS will still work on these systems.
+</Aside>
+
+### Does AerynOS offer NVIDIA GPU support?
+
+Due to the way NVIDIA distributes its drivers, maintaining them in a distro is labor-intensive and frustrating when they do not work as advertised.
+
+Given AerynOS is in the Alpha development stage, only limited, best effort NVIDIA enablement related to cards supported by the so-called nvidia-open-gpu-kernel-modules is currently offered.
+
+You can check the status of NVIDIA support in [AerynOS/recipes#435](https://github.com/AerynOS/recipes/issues/435)
+
+### Does AerynOS support being installed alongside another OS?
+
+Officially? Not yet.
+
+You can try, but there is no guarantee that AerynOS won't eat your other OS.
+
+You have been warned.
+
+### What is the recommended partition layout for AerynOS?
+
+In practice, we recommend that you install AerynOS to a separate drive with:
+
+- A >=256MB ESP FAT32 partition (type 1 in fdisk).
+  -   This must be manually formatted for the installer to recognize it.
+- A 4GB XBOOTLDR FAT32 partition (type 142 in fdisk, bls_boot in gparted).
+  - This must be manually formatted for the installer to recognize it.
+  - This partition is large, because it is where the AerynOS kernel+initramfs and (in the future) rescue image files will be saved.
+- A >20 GB system xfs partition
+  - This must be manually formatted for the installer to recognize it.
+  - The larger the xfs system (/ or root) partition is, the more OS /usr directory rollback states it can support in /.moss/.
+
+```
+ermo@virgil:~
+❯ sudo fdisk -l /dev/nvme1n1
+Disk /dev/nvme1n1: 931,51 GiB, 1000204886016 bytes, 1953525168 sectors
+Disk model: Samsung SSD 980 PRO 1TB
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: ED391D3B-7BCC-4407-911F-FF7B2CECB45A
+
+Device           Start        End    Sectors   Size Type
+/dev/nvme1n1p1    2048     526335     524288   256M EFI System
+/dev/nvme1n1p2  526336    8914943    8388608     4G Linux extended boot
+/dev/nvme1n1p3 8914944 1953523711 1944608768 927,3G Linux root (x86-64)
+ermo@virgil:~
+❯ sudo lsblk -f /dev/nvme1n1
+NAME        FSTYPE FSVER LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
+nvme1n1
+├─nvme1n1p1 vfat   FAT32       CA93-B86A
+├─nvme1n1p2 vfat   FAT32       C837-2227
+└─nvme1n1p3 xfs                569404f0-74ce-4c9e-936a-96aca25c7cd0  845,6G     9% /
+ermo@virgil:~
+```
+
+NB: Remember, there is nothing stopping you from creating an extra partition, formatting it with a filesystem of your choice, and then configuring /etc/fstab to mount it as /home after AerynOS has been installed. You can do this if you want to use a different filesystem than xfs for your /home folders for whatever reason.

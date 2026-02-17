@@ -1,0 +1,33 @@
+---
+title: Filesystems
+lastUpdated: 2026-01-15T12:25:00Z
+description: Information about filesystem support on AerynOS
+---
+
+# Filesystems
+
+### Why do you recommend the xfs filesystem for the root partition?
+
+[Testing has shown](https://github.com/AerynOS/os-tools/blob/main/moss-filesystem-performance.md) that, due to how moss saves rollback states, xfs is by far the quickest filesystem in practice for AerynOS root partition usage.
+
+We currently do not recommend either ext4 or f2fs root partitions, because testing has shown that they offer very poor performance on the first update (sudo moss sync -u) after a cold start of your computer compared to xfs.
+
+### Do you support installing AerynOS on ext4?
+
+We currently **strongly recommend** that you use **xfs** on your root partition for the best experience with moss and AerynOS.
+
+### Do you support installing AerynOS on f2fs?
+
+We currently **strongly recommend** that you use **xfs** on your root partition for the best experience with moss and AerynOS.
+
+### Do you support installing AerynOS on btrfs?
+
+Not yet
+
+### Do you support installing AerynOS on bcachefs?
+
+Not yet
+
+### Do you support installing AerynOS on ZFS?
+
+Not at this stage. We may or may not decide to support it at some unspecified point in the future, provided we can guarantee that we are legally in the clear to do so.
