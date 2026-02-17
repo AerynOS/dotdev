@@ -4,15 +4,33 @@ lastUpdated: 2026-01-15T12:25:00Z
 description: Installation FAQ for AerynOS
 ---
 
+import { Aside } from "@astrojs/starlight/components";
+
 # Installation Questions
 
 ### Which CPUs does AerynOS support?
 
-AerynOS is currently only compiled for the x86_64-v2 target architecture, which means that it will run on CPUs supporting x86_64-v2 or greater psABI feature levels.
+AerynOS is currently only compiled for the x86-64-v2 target architecture, which means that it will run on CPUs supporting x86-64-v2 or greater psABI feature levels.
 
-Checking the currently supported x86_64 psABI feature level of a system can be done by executing the following snippet in a terminal as a normal user:
+Checking the currently supported x86-64 psABI feature level of a system can be done by typing the following command in a terminal as a normal user:
 
-```curl https://raw.githubusercontent.com/HenrikBengtsson/x86-64-level/refs/heads/develop/x86-64-level | bash -s -- --verbose```
+```
+/usr/lib64/ld-linux-x86-64.so.2 --help | grep "x86-64"
+```
+
+On an x86-64-v2 based system, you will see the following output:
+
+```
+Usage: /usr/lib64/ld-linux-x86-64.so.2 [OPTION]... EXECUTABLE-FILE [ARGS-FOR-PROGRAM...]
+This program interpreter self-identifies as: /usr/lib/ld-linux-x86-64.so.2
+  x86-64-v4
+  x86-64-v3
+  x86-64-v2 (supported, searched)
+```
+
+<Aside type="note">
+    If the x86-64-v3 and x86-64-v4 psABI feature levels were supported, they would also show `(supported, searched)` next to them. AerynOS will still work on these systems.
+</Aside>
 
 ### Does AerynOS offer NVIDIA GPU support?
 
