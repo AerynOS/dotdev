@@ -1,6 +1,6 @@
 ---
 title: Manage Moss States and Packages
-lastUpdated: 2025-09-28T16:14:34Z
+lastUpdated: 2026-02-20T13:33:00Z
 description: Learn how to inspect and switch states, search for software, and keep an AerynOS system up to date with moss.
 ---
 
@@ -64,6 +64,23 @@ sudo moss search-file libEGL.so
 ```
 
 `moss search-file` scans files from installed packages only.
+
+## Fetch package stones
+
+Use `moss fetch` to download one or more package `.stone` files by name without installing them on the current system.
+
+```bash
+moss fetch howdy-git
+```
+
+Fetch multiple packages into a custom output directory:
+
+```bash
+moss fetch howdy-git fractional --output-dir ~/stones
+```
+
+`moss fetch` writes downloaded files to the current directory by default. Add `--verbose` when you need more detailed progress output.
+If a package cannot be resolved, refresh repository metadata and try again:
 
 ## Install software
 
