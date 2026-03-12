@@ -25,7 +25,7 @@ sudo moss sync --update
 Use keyword searches to discover software by name or summary.
 
 ```bash
-sudo moss search fractional
+sudo moss search something
 ```
 
 Add `--installed` (`-i`) if you only want to search software that is already present on the system.
@@ -36,7 +36,7 @@ Add `--installed` (`-i`) if you only want to search software that is already pre
 Look up which package delivered a specific file when you troubleshoot or audit an installation.
 
 ```bash
-sudo moss search-file libEGL.so
+sudo moss search-file filename
 ```
 
 `moss search-file` scans files from installed packages only.
@@ -53,7 +53,7 @@ sudo moss repo update
 2. Install one or more packages.
 
 ```bash
-sudo moss install howdy-git
+sudo moss install somepackage
 ```
 
 Moss creates a new state automatically. Confirm success with `moss state active`.
@@ -64,7 +64,7 @@ Moss creates a new state automatically. Confirm success with `moss state active`
 Uninstall packages you no longer need.
 
 ```bash
-sudo moss remove howdy-git
+sudo moss remove somepackage
 ```
 
 Moss snapshots the removal in a new state. Use `moss state list` to find the previous state if you have to recover.
@@ -170,13 +170,13 @@ If you would like to keep an archive of stones, moss supports a fetch operation.
 Use `moss fetch` to download one or more package `.stone` files by name without installing them on the current system.
 
 ```bash
-moss fetch howdy-git
+moss fetch somepackage
 ```
 
 Fetch multiple packages into a custom output directory:
 
 ```bash
-moss fetch howdy-git fractional --output-dir ~/stones
+moss fetch package1 package2 --output-dir ~/stones
 ```
 
 `moss fetch` writes downloaded files to the current directory by default. Add `--verbose` when you need more detailed progress output. If a package cannot be resolved, refresh repository metadata and try again.
