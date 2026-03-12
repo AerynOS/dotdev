@@ -1,14 +1,93 @@
 ---
 title: Manage Moss States and Packages
-lastUpdated: 2026-02-20T13:33:00Z
-description: Learn how to inspect and switch states, search for software, and keep an AerynOS system up to date with moss.
+lastUpdated: 2026-03-12T10:33:00Z
+description: Learn how to update, install, remove, and search for packages, and how to inspect, switch and clean up states with moss.
 ---
 
 Moss keeps track of packaging-related operations that change the state of the /usr directory by creating a new filesystem transaction (fstx) for each associated moss operation, be it package installation, removal, or upgrades. 
 
-Use the commands below to inspect and manage those states, discover software, and keep your system current.
+Use the commands below to manage your installed software packages, and keep your system current.
 
-## Check the current state
+
+## Update the system
+
+Keep the entire system current with a sync operation.
+
+```bash
+sudo moss sync --update
+```
+
+`--update` (`-u`) pulls fresh repository metadata before applying upgrades. Moss records the result as a new state, so you can roll back if something goes wrong.
+
+
+## Search for packages
+
+Use keyword searches to discover software by name or summary.
+
+```bash
+sudo moss search fractional
+```
+
+Add `--installed` (`-i`) if you only want to search software that is already present on the system.
+
+
+## Search for installed files
+
+Look up which package delivered a specific file when you troubleshoot or audit an installation.
+
+```bash
+sudo moss search-file libEGL.so
+```
+
+`moss search-file` scans files from installed packages only.
+
+
+## Install new software packages
+
+1. Refresh repository metadata when needed.
+
+```bash
+sudo moss repo update
+```
+
+2. Install one or more packages.
+
+```bash
+sudo moss install howdy-git
+```
+
+Moss creates a new state automatically. Confirm success with `moss state active`.
+
+
+## Remove software packages
+
+Uninstall packages you no longer need.
+
+```bash
+sudo moss remove howdy-git
+```
+
+Moss snapshots the removal in a new state. Use `moss state list` to find the previous state if you have to recover.
+
+
+## List currently installed software packages
+
+
+```bash
+moss list installed
+```
+
+
+## Atomic and independent states
+
+In the preceding examples, it was briefly mentioned that moss creates new "states".
+
+When using moss, state management is an important concept. This section details the fundamentals of moss state management.
+
+Moss is based on the concept of atomic updates. Atomic in this context means "independent units". Each time the user instructs moss to change the state of the system, moss creates a new, independent state. Because each state is independent, it allows moss to roll back to an earlier state, and roll forward to a later state.
+
+
+### Check the current active state
 
 1. List the active state to confirm what is running right now.
 
@@ -22,9 +101,10 @@ moss state active
 moss state list
 ```
 
-Use the state ID (the number after `State #`) when you need to query or activate a specific snapshot.
+Use the state ID (the number after `State #`) when you need to query, activate, or remove a specific state.
 
-## Activate a different state
+
+### Activate a different state
 
 Follow these steps to roll back or advance to another state safely.
 
@@ -45,27 +125,47 @@ Activating a state atomically swaps the currently active state's /usr directory 
 
 On successful activation of the new state, it is recommended to reboot the system, so that long-running services start with the expected binaries, libraries, and configurations.
 
-## Search for packages
 
-Use keyword searches to discover software by name or summary.
+### Clean up retained states
+
+Over time, a system managed by moss will accumulate more and more states. Each state takes up space that is equivalent to the difference in packages between one state to another. If two states share a lot of package versions, the storage needed to keep the difference between states will be small.
+
+There are two ways to clean up retained states:
+
+- Prune, which removes all states except the N latest states
+- Remove, which is capable of removing individual states and ranges of states.
+
+### Prune states
+
+This will prune state history to keep only the 10 latest states, including the current active state:
 
 ```bash
-sudo moss search fractional
+sudo moss state prune
 ```
 
-Add `--installed` (`-i`) if you only want to search software that is already present on the system.
-
-## Search for installed files
-
-Look up which package delivered a specific file when you troubleshoot or audit an installation.
+If you want to keep a different number of states, the `-k` / `--keep` parameter will let you specify the number of states you wish to keep:
 
 ```bash
-sudo moss search-file libEGL.so
+# Keep the five latest states, including the active state
+sudo moss state prune --keep 5
+# or
+sudo moss state prune -k 5
 ```
 
-`moss search-file` scans files from installed packages only.
+### Remove specific states
 
-## Fetch package stones
+Sometimes, it is useful to be able to remove one or more specific states. This can be accomplished with the `state remove` operation.
+
+```bash
+moss state remove 2 8-12 15 17-21
+```
+
+As you can see, `state remove` enables you to remove both individual states and ranges of states. Ranges are inclusive, meaning the start and end states of the specified range are also removed.
+
+
+## Fetch package .stone files for backup purposes
+
+If you would like to keep an archive of stones, moss supports a fetch operation.
 
 Use `moss fetch` to download one or more package `.stone` files by name without installing them on the current system.
 
@@ -79,48 +179,8 @@ Fetch multiple packages into a custom output directory:
 moss fetch howdy-git fractional --output-dir ~/stones
 ```
 
-`moss fetch` writes downloaded files to the current directory by default. Add `--verbose` when you need more detailed progress output.
-If a package cannot be resolved, refresh repository metadata and try again:
+`moss fetch` writes downloaded files to the current directory by default. Add `--verbose` when you need more detailed progress output. If a package cannot be resolved, refresh repository metadata and try again.
 
-## Install software
+Note also that moss fetches .stones against currently active repository `stone.index` files.
 
-1. Refresh repository metadata when needed.
-
-```bash
-sudo moss repo update
-```
-
-2. Install one or more packages.
-
-```bash
-sudo moss install howdy-git
-```
-
-Moss creates a new state automatically. Confirm success with `moss state active`.
-
-## Update the system
-
-Keep the entire system current with a sync operation.
-
-```bash
-sudo moss sync --update
-```
-
-`--update` (`-u`) pulls fresh repository metadata before applying upgrades. Moss records the result as a new state, so you can roll back if something goes wrong.
-
-## Remove software
-
-Uninstall packages you no longer need.
-
-```bash
-sudo moss remove howdy-git
-```
-
-Moss snapshots the removal in a new state. Use `moss state list` to find the previous state if you have to recover.
-
-## List currently installed software
-
-
-```bash
-moss list installed
-```
+You can list your currently active repository index with `moss repo list`.
