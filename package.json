@@ -11,13 +11,13 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.37.2",
-    "astro": "^5.16.8",
+    "@astrojs/starlight": "^0.37.7",
+    "astro": "^5.18.1",
     "sharp": "^0.34.5",
     "starlight-kbd": "^0.3.0",
     "starlight-links-validator": "^0.19.2",
     "starlight-scroll-to-top": "^0.4.0",
-    "yaml": "^2.8.2"
+    "yaml": "^2.8.3"
   },
   "devDependencies": {
     "puppeteer": "^23.11.1",
