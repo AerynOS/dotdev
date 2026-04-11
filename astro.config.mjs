@@ -207,7 +207,7 @@ export default defineConfig({
               label: "Stone Format",
               items: [
                 { slug: "developers/stone" },
-                { slug: "developers/stone/header" },
+                { slug: "developers/stone/prelude" },
                 {
                   label: "V1",
                   items: [
