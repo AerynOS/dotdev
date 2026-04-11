@@ -2,9 +2,6 @@
 title: Stone Format
 lastUpdated: 2026-04-11T00:00:00Z
 description: An overwiew of the Stone format
-config:
-  packet:
-    showBits: false
 ---
 import DirectoryList from '@components/DirectoryList.astro';
 
@@ -18,6 +15,13 @@ No limit is set for the length of a *stone*, but it will always be at least 32 b
 the Prelude.
 
 ```mermaid
+%%{
+  init: {
+    'packet': {
+       'showBits': false
+    }
+  }
+}%%
 packet
 +32: "Prelude — 32 bits"
 +16: "Payload 1 header —32 bits"
