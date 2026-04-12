@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
+import mermaid from "astro-mermaid";
 import starlightLinksValidator from "starlight-links-validator";
 import starlightScrollToTop from "starlight-scroll-to-top";
 import starlightKbd from "starlight-kbd";
@@ -9,6 +10,9 @@ import starlightKbd from "starlight-kbd";
 export default defineConfig({
   site: "https://aerynos.dev",
   integrations: [
+    mermaid({
+      enableLog: false,
+    }),
     starlight({
       logo: {
         dark: "@/images/logo.svg",
