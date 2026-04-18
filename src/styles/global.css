@@ -15,7 +15,8 @@ https://starlight.astro.build/guides/css-and-tailwind/#color-theme-editor
 	--sl-color-gray-5: #39373e;
 	--sl-color-gray-6: #27262c;
 	--sl-color-black: #18181b;
-	--sl-content-width: 80rem;
+	--sl-content-width: 70rem;
+	--sl-breakpoint-lg: 100rem;
 }
 /* Light mode colors. */
 :root[data-theme='light'] {
@@ -31,5 +32,6 @@ https://starlight.astro.build/guides/css-and-tailwind/#color-theme-editor
 	--sl-color-gray-6: #eeedf1;
 	--sl-color-gray-7: #f6f6f8;
 	--sl-color-black: #ffffff;
-	--sl-content-width: 80rem;
+	--sl-content-width: 70rem;
+	--sl-breakpoint-lg: 100rem;
 }
