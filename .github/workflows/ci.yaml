@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: 2026 AerynOS Developers
+# SPDX-License-Identifier: MPL-2.0
+
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  meta:
+    runs-on: ubuntu-latest
+    name: Non-code Checks
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v6
+
+      - name: Check for typos
+        uses: crate-ci/typos@v1.45.1
