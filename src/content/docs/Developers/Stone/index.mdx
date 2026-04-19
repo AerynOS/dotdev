@@ -1,18 +1,25 @@
 ---
 title: Stone Format
-lastUpdated: 2026-04-11T00:00:00Z
+lastUpdated: 2026-04-19T00:00:00Z
 description: An overwiew of the Stone format
 ---
 import DirectoryList from '@components/DirectoryList.astro';
 
 The Stone format is a binary format designed to be type-safe and version-aware.
-It is used to package and distribute software in AerynOS, in fact both the very packages and the index
-file of repositories use the Stone format.
+It is used to package and distribute software in AerynOS, in fact both the packages themselves
+and the index file of repositories use the Stone format.
 
 Anything encoded in the Stone format is called a *stone*.
 Each *stone* is composed of a Prelude (the global header) and zero or more payloads, each with its own sub-header.
-No limit is set for the length of a *stone*, but it will always be at least 32 byte long, that is the size of
+No limit is set for the length of a *stone*, but it will always be at least 32 bytes long, that is the size of
 the Prelude.
+
+To completely encode or decode a given *stone*, The Stone version must be taken into account,
+as different versions may support different contents.
+The version is stored in the Prelude, as explained in the pages to come.
+For now, it is sufficient to remember that each *stone* targets exactly one version.
+
+Described below is the general (that is, version-agnostic) layout of a *stone*.
 
 ```mermaid
 %%{
@@ -24,7 +31,7 @@ the Prelude.
 }%%
 packet
 +32: "Prelude — 32 bits"
-+16: "Payload 1 header —32 bits"
++16: "Payload 1 header — 32 bits"
 +16: "Payload 1 records — Variable length"
 +16: "Payload 2 header — 32 bits"
 +16: "Payload 2 records — Variable length"
@@ -38,6 +45,9 @@ The fundamental types of the Stone format are integer numbers and strings.
 | Signed integer | Big-endian | Various | Integer number with a sign. When negative, two's complement is used. The range of values goes from -2^(n-1) to 2^(n-1)-1, where `n` is the number of bytes. |uint|
 | Unsigned integer | Big-endian | Various | Integer number without a sign. The range of values goes from 0 to 2^(n)-1, where `n` is the number of bytes. |int|
 | String | UTF-8 | Various | A string of text, without the NULL termination. |str|
+
+Types with a variable length are always combined with a field that reveals the actual length.
+The position of such field depends on the version of the Stone format in use.
 
 The documentation will delve into the details of each section in the next pages.
 
