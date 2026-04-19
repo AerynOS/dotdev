@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: 2026 AerynOS Developers
+# SPDX-License-Identifier: MPL-2.0
+
+[default]
+extend-ignore-re = [
+    # Ignore blocks between `spellchecker:off` and `spellchecker:on`
+    "spellchecker:off.*?\\n*.*spellchecker:on",
+]
+
+[files]
+extend-exclude = ["/package-lock.json"]
