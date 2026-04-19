@@ -7,5 +7,9 @@ extend-ignore-re = [
     "spellchecker:off.*?\\n*.*spellchecker:on",
 ]
 
+[default.extend-words]
+# Specifically for the "General FAQ" page.
+aer = "aer"
+
 [files]
 extend-exclude = ["/package-lock.json"]
