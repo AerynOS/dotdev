@@ -1,0 +1,92 @@
+---
+title: Meta
+lastUpdated: 2026-04-22T00:00:00Z
+description: The format of the Meta record
+---
+
+The Meta record carries information about the *stone*
+itself or other <a href="/developers/stone/v1/header/#type">binary packages</a>, hence the name "meta".
+It is composed of a 8 bytes long header-like section, plus a value of variable length.
+The information it carries is strongly typed.
+
+Some of its fields can only be found in Repository *stones*, since they are information about packages to download.
+
+| Field | Type | Size (bytes) | Description |
+|---|---|---|---|
+| length | uint | 4 | Length, in bytes, of the value that follows the header-like section. |
+| tag | uint | 2 | What information this record carries about the *stone*. |
+| kind | uint | 1 | The base type of the information, for proper encoding and decoding. |
+| padding | blob | 1 | Unused. |
+| value | blob | `length` | Value of the information. The encoding depends on the value of `kind`. |
+
+### tag
+
+`tag` is an enum.
+
+|Value|Name|Description|
+|---|---|---|
+| 1 | Name | Name of the *stone*, which is typically the name of a package to install or remove. |
+| 2 | Architecture | Target hardware architecture of the package. |
+| 3 | Version | Version of the package. |
+| 4 | Summary | Succinct description of a package. |
+| 5 | Description | Full length description of the package. |
+| 6 | Homepage | Web homepage of the project being packaged. |
+| 7 | SourceID | ID of the source package, used for grouping. |
+| 8 | Depends | One dependency of the package. |
+| 9 | Provides | One capability, or the name, of the package. See further paragraphs for details. |
+| 10 | Conflicts | One capability, or name of another package, that conflicts with this package. |
+| 11 | Release | Release number of the package. It differs from Version in that Version identifies a state of the upstream project. Release is an increasing number that relates to the package. |
+| 12 | License | One license under which the upstream project is released, in [SPDX format](https://spdx.org/licenses). |
+| 13 | BuildRelease | Uniquely identifies a rebuild of a *stone*. It is an increasing number. |
+| 14 | PackageURI | URL relative to the base repository URL, where to download a package from. It is specific to a Repository *stone*. |
+| 15 | PackageHash | SHA-256 hash of a whole package *stone*. It is specific to a Repository *stone*. |
+| 16 | PackageSize | Size, in bytes, of a package when installed on disk (assumed when the CAS is empty, thus without de-duplication). It is specific to a Repository *stone*. |
+| 17 | BuildDepends | Build-time dependency of a package. |
+| 18 | SourceURI | Upstream URL for the source archive of a package. |
+| 19 | SourcePath | Relative path for the source within the upstream URL. |
+| 20 | SourceRef | Git commit or ref of the upstream source. |
+
+### kind
+
+`kind` is an enum.
+
+|Value|Name|Description|
+|---|---|---|
+| 1 | Int8 | int, 1 byte long. |
+| 2 | Uint8 | uint, 1 byte long. |
+| 3 | Int16 | int, 2 bytes long. |
+| 4 | Uint16 | uint, 2 bytes long. |
+| 5 | Int32 | int, 4 bytes long. |
+| 6 | Uint32 | uint, 4 bytes long. |
+| 7 | Int64 | int, 8 bytes long. |
+| 8 | Uint64 | uint, 8 bytes long. |
+| 9 | String | String. |
+| 10 | Dependency | <a href="#packagereference">PackageReference</a> structure. |
+| 11 | Provider | <a href="#packagereference">PackageReference</a> structure. |
+
+### PackageReference
+
+As explained before, the encoding format of `value` is explicated by the `kind` enum.
+Most of the kinds are a characterization of a <a href="/developers/stone">base format</a>,
+but there is one outstanding kind: PackageReference. Below is the format of PackageReference.
+
+| Field | Type | Size (bytes) | Description |
+|---|---|---|---|
+| kind | uint | 1 | Kind of package one depends on, or provides. |
+| name | str | `length` - 1 | Value of the reference. |
+
+#### kind
+
+`PackageReference`'s `kind` field is an enum.
+
+|Value|Name|Description|
+|---|---|---|
+| 0 | PackageName | A package depends on, or provides, a package name. |
+| 1 | SharedLibrary | A package depends on, or provides, a shared library (`*.so` file). |
+| 2 | PkgConfig | A package depends on, or provides, a [pkg-config](https://www.freedesktop.org/wiki/Software/pkg-config) target. |
+| 3 | Interpreter | A package depends on, or provides, a program interpreter (i.e. an ELF binary with `PT_INTERP` set). |
+| 4 | CMake | A package depends on, or provides, a [CMake](https://cmake.org) target. |
+| 5 | Python | A package depends on, or provides, a Python module. |
+| 6 | BinaryDep | A package depends on, or provides, a binary file in `/usr/bin`. |
+| 7 | SystemBinary | A package depends on, or provides, a binary file in `/usr/sbin`. |
+| 8 | PkgConfig32 | Like `PkgConfig`, but emul32-compatible. |
