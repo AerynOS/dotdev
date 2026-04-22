@@ -1,34 +1,33 @@
 ---
-title: V1 Header
-lastUpdated: 2025-03-28T05:28:00Z
-description: The v1 header of the stone format
+title: Header
+lastUpdated: 2026-04-22T00:00:00Z
+description: The header of the Stone v1 format
 ---
 
-The v1 header contains 3 fields to denote the type of the `.stone` file as well as a count of the payloads. These are contained within the 24-byte `data` field of the agnostic header.
+The v1 header is contained in <a href="/developers/stone/prelude">Prelude</a>'s 24-byte Data field.
+It contains fields to denote the type of the *stone* as well as the number of payloads.
 
 ## Fields
 
-    | Field         | Size     | Description                               |
-    |---------------|----------|-------------------------------------------|
-    | num_payloads  | 2 bytes  | Number of all payloads within the archive |
-    | padding_chk   | 21 bytes | Simple corruption check (fixed content)   |
-    | type          | 1 byte   | Denotes the archive type                  |
+| Field | Type | Size (bytes) | Description |
+|---|---|---|---|
+| num_payloads | uint | 2 | Number of payloads within the *stone*. |
+| padding_chk | blob | 21 | Corruption check (fixed content). |
+| type | uint | 1 | Denotes the *stone*'s type. |
 
-## The padding check
+### padding_chk
 
-While building the stone format, we built-in the `.data` field to permit future extensions in subsequent stone versions. As of v1, the `.padding_chk` field contains a statically initialized array as a mild corruption check.
+`padding_chk` contains a fixed array as a mild corruption check:
+`[0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 7]`.
 
-```rust
-const INTEGRITY_CHECK: [u8; 21] = [
-    0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 7,
-];
-```
+### type
 
-## Types
+`type` denotes the intended use of a *stone*. Applications may consider
+the value of this field when executing logic, but it doesn't affect the way a *stone* is encoded or decoded.
 
-    | Name          | Value | Description                                                         |
-    |---------------|-------|---------------------------------------------------------------------|
-    | Binary        | 1     | Standard package                                                    |
-    | Delta         | 2     | currently unused                                                    |
-    | Repository    | 3     | A package repository index                                          |
-    | BuildManifest | 4     | A build-time artefact containing the _yield potential_ of a package |
+| Value | Type | Description |
+|---|---|---|
+| 1 | Binary | Standard package. |
+| 2 | Delta | Currently unused. |
+| 3 | Repository | Index of a repository of packages. |
+| 4 | BuildManifest | Build-time artefact containing the _yield potential_ of a package. |
