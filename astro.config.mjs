@@ -218,6 +218,7 @@ export default defineConfig({
                       items: [
                         { slug: "developers/stone/v1/record/attribute" },
                         { slug: "developers/stone/v1/record/content" },
+                        { slug: "developers/stone/v1/record/index/index" },
                       ],
                     },
                   ],
