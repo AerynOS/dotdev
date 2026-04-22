@@ -1,0 +1,63 @@
+---
+title: Index
+lastUpdated: 2026-04-22T00:00:00Z
+description: The format of the Index record
+slug: developers/stone/v1/record/index/index
+---
+
+The Index record isolates a region of a Content record. This is especially useful
+when the Content's blob is composed of heterogenous data that must be managed separately.
+
+The Index record does not specify which Content record it refers to; applications
+may use custom logic to disambiguate the correct record (e.g., a *stone* may be encoded
+with Index records followed by the Content they refer to). The trivial case is a *stone*
+with only one Content record.
+
+| Field | Type | Size (bytes) | Description |
+|---|---|---|---|
+| start | uint | 8 | The offset in the Content blob where this region begins. This is a zero-based index: the first byte is addressed with 0. |
+| end | uint | 8 | The offset in the Content blob where this region ends. This last byte is included in the range. This is a zero-based index: the first byte is addressed with 0. |
+| hash | blob | 16 | Checksum of the content of the region, computed using <a href="https://xxhash.com">XXH3_128bits</a>. |
+
+Illustrated below is an example of two Index records addressing the same Content.
+
+```mermaid
+block
+  columns 3
+
+block
+columns 1
+  block:Index1:1
+  columns 1
+    start1["start = 1"]
+    end1["end = 3"]
+    cap1["hash"]
+  end
+space
+  block:Index2:1
+columns 1
+    start2["start = 1"]
+    end2["end = 6"]
+    cap2["hash"]
+  end
+  end
+
+space
+
+  block:Content
+  columns 1
+    c0["0x41"]
+    c1["0x65"]
+    c2["0x72"]
+    c3["0x79"]
+    c4["0x6E"]
+    c5["0x4F"]
+    c6["0x53"]
+  end
+
+  start1 --> c1
+  end1 --> c3
+
+start2 --> c1
+end2 --> c6
+```
