@@ -1,6 +1,6 @@
 ---
 title: Stone Format
-lastUpdated: 2026-04-19T00:00:00Z
+lastUpdated: 2026-04-22T00:00:00Z
 description: An overview of the Stone format
 ---
 import DirectoryList from '@components/DirectoryList.astro';
@@ -42,14 +42,16 @@ The first payload, if present, immediately follows the Prelude.
 
 The fundamental types of the Stone format are integer numbers and strings.
 
-| Type | Format | Length (in bytes) | Description | Abbreviation|
+| Type | Format | Size (bytes) | Description | Abbreviation|
 |---|---|---|---|---|
-| Signed integer | Big-endian | Various | Integer number with a sign. When negative, two's complement is used. The range of values goes from -2^(n-1) to 2^(n-1)-1, where `n` is the number of bytes. |uint|
-| Unsigned integer | Big-endian | Various | Integer number without a sign. The range of values goes from 0 to 2^(n)-1, where `n` is the number of bytes. |int|
-| String | UTF-8 | Various | A string of text, without the NULL termination. |str|
+| Signed integer | Big-endian | Variable | Integer number with a sign. When negative, two's complement is used. The range of values goes from -2^(n-1) to 2^(n-1)-1, where `n` is the number of bytes. |uint|
+| Unsigned integer | Big-endian | Variable | Integer number without a sign. The range of values goes from 0 to 2^(n)-1, where `n` is the number of bytes. |int|
+| String | UTF-8 | Variable | String of text, without the NULL termination. |str|
+| Blob | Undetermined | Variable | Meaningless or context-dependent array of bytes. | blob
 
-Types with a variable length are always combined with a field that reveals the actual length.
-The position of such field depends on the version of the Stone format in use.
+The length of a field is documented where it is known a priori.
+When this is not possible, it is always paired with another field that reveals its actual length.
+The position of the latter depends on the version of the Stone format in use.
 
 The documentation will delve into the details of each section in the next pages.
 
