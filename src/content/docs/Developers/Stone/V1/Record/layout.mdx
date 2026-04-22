@@ -1,0 +1,89 @@
+---
+title: Layout
+lastUpdated: 2026-04-22T00:00:00Z
+description: The format of the Layout record
+---
+
+The Layout record contains metadata of a file or directory that should be written to the mass memory.
+When combined with a Content record (and possibly an Index record), it is possible to write the file
+or directory on disk in a reproducible way.
+
+It is composed of a 32 bytes long header-like section and two fields of variable length.
+
+| Field | Type | Size (bytes) | Description |
+|---|---|---|---|
+| uid | uint | 4 | User ID of the owner of the file. |
+| gid | uint | 4 | Group ID of the owner of the file. |
+| mode | uint | 4 | File's mode and permission bits. |
+| tag | blob | 4 | Unused. |
+| source_length | uint | 2 | Length of the `source` blob. |
+| target_length | uint | 2 | Length of the `target` string. |
+| file_type | uint | 1 | Type of file to be written. |
+| padding | blob | 11 | Unused. |
+| source | blob | Specified by `source_length` | "source" of the file. Its meaning varies depending on `file_type`. |
+| target | str | Specified by `target_length` | Path where the file should be written to. |
+
+### file_type
+
+`file_type` is an enum that specifies the type of file that should be written on disk.
+
+<table>
+  <thead>
+    <tr>
+      <th>Value</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Meaning of <code>source</code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Regular</td>
+      <td>Regular file of data.</td>
+      <td>
+          <a href="https://xxhash.com">XXH3_128bits</a> hash of the file.
+          <br/>The source is a hash because our package manager, Moss, uses a
+          <a href="https://en.wikipedia.org/wiki/Content-addressable_storage">CAS</a> to store files.
+          This hash may be also used to match an Index record, in order to identify a region of a Content
+          record to read. In fact, the Index record also contains a XXH3_128bits-based hash.
+      </td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Symlink</td>
+      <td>Symbolic link to another file.</td>
+      <td>String. Original file path to link somewhere else.</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Directory</td>
+      <td>Empty directory.</td>
+      <td>Unused.</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>CharacterDevice</td>
+      <td><a href="https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_91">Character device</a>.</td>
+      <td>Unused.</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>BlockDevice</td>
+      <td><a href="https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_79">Block device</a>.</td>
+      <td>Unused.</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>FIFO</td>
+      <td><a href="https://man7.org/linux/man-pages/man7/fifo.7.html">POSIX FIFO</a>.</td>
+      <td>Unused.</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>Socket</td>
+      <td><a href="https://man7.org/linux/man-pages/man2/socket.2.html">POSIX communication socket</a>.</td>
+      <td>Unused.</td>
+    </tr>
+  </tbody>
+</table>
