@@ -1,0 +1,16 @@
+---
+title: Attribute
+lastUpdated: 2026-04-22T00:00:00Z
+description: The format of the Attribute record
+---
+
+The Attribute record is a general-purpose key-value pair. The format of the key and the value is undetermined:
+applications will use them according to the context they operate in. The Attribute record has no fixed length,
+but it is at least 16 bytes long.
+
+| Field | Type | Size (bytes) | Description |
+|---|---|---|---|
+| key_size | uint | 8 | Size, in bytes, of the `key` field. |
+| value_size | uint | 8 | Size, in bytes, of the `value` field.
+| key | blob | Variable | General-purpose key. |
+| value | blob | Variable | General-purpose value. |
