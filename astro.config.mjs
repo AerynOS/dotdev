@@ -213,6 +213,7 @@ export default defineConfig({
                   items: [
                     { slug: "developers/stone/v1" },
                     { slug: "developers/stone/v1/header" },
+                    { slug: "developers/stone/v1/payload-subheader" },
                     {
                       label: "Records",
                       items: [
