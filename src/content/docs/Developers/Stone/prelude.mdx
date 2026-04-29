@@ -9,17 +9,17 @@ fields can be handled separately from version and format detection. This is a 32
 
 ## Fields
 
-| Field | Type | Size | Description |
+| Field | Type | Size (bytes) | Description |
 |---|---|---|---|
-| Magic | str | 4 | Always `0x006d6f73` |
-| Data | Version-dependent | 24 | Version-specific header of the *stone* |
-| Version | uint | 4 | Version number, i.e. `1` |
+| magic | str | 4 | Always `0x006d6f73`. |
+| data | Version-dependent | 24 | Version-specific header of the *stone*. |
+| version | uint | 4 | Version number, i.e. `1`. |
 
-### Magic
+### magic
 
 It's the [magic number](https://en.wikipedia.org/wiki/Magic_number_(programming)) of the Stone format.
 
-The Magic field always contains `['\0', 'M', 'O', 'S']`.
+The `magic` field always contains `['\0', 'M', 'O', 'S']`.
 It is defined after AerynOS's package manager: `moss`.
 
 In the Rust language it is defined as:
@@ -28,11 +28,11 @@ In the Rust language it is defined as:
 pub const STONE_MAGIC: &[u8; 4] = b"\0mos";
 ```
 
-### Data
+### data
 
-The content of the Data field depends on the Version field.
+The content of the `data` field depends on the Version field.
 Documentation about Stone versions is available in the next pages.
 
-### Version
+### version
 
 A number that uniquely identifies the version of the Stone format in use.
