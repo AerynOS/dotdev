@@ -108,6 +108,7 @@ moss repo list
 # add repositories
 # note: ${HOME} will be replaced by the actual home directory of the user
 #       invoking the command. In the example below, ${HOME} = /home/live"
+sudo moss repo add unstable https://cdn.aerynos.dev --root-index channel=main,version=stream/unstable -p 0
 sudo moss repo add volatile https://cdn.aerynos.dev --root-index channel=main,version=stream/volatile -p 10
 sudo moss repo add local file://${HOME}/.cache/local_repo/x86_64/stone.index -p 100
 moss repo list
