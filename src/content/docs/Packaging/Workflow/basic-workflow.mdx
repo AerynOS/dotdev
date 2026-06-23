@@ -1,6 +1,6 @@
 ---
 title: 'Basic packaging workflow'
-lastUpdated: 2025-06-23T00:00:00Z
+lastUpdated: 2026-06-19T00:00:00Z
 description: "Building packages locally and testing them"
 ---
 
@@ -52,41 +52,47 @@ Boulder will need to have its list of "build profiles" be updated before it will
 boulder profile list
 # output
 default-x86_64:
-  - volatile = https://cdn.aerynos.dev/stream/volatile/x86_64/stone.index [0]
+ - volatile = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/volatile, arch=x86_64) [0]
+
 
 # add new local-x86_64 build profile
 # note: ${HOME} will be replaced by the actual home directory of the user
 #       invoking the command. In the example below, ${HOME} = /home/ermo
 boulder profile add \
-  --repo name=volatile,uri=https://cdn.aerynos.dev/stream/volatile/x86_64/stone.index,priority=0 \
+  --repo name=volatile,base-uri=https://cdn.aerynos.dev,version=stream/unstable,priority=0 \
   --repo name=local,uri=file://${HOME}/.cache/local_repo/x86_64/stone.index,priority=100 \
   local-x86_64
 boulder profile list
 # output
 default-x86_64:
- - volatile = https://cdn.aerynos.dev/stream/volatile/x86_64/stone.index [0]
+ - volatile = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/volatile, arch=x86_64) [0]
 local-x86_64:
- - volatile = https://cdn.aerynos.dev/stream/volatile/x86_64/stone.index [0]
- - local = file:///home/ermo/.cache/local_repo/x86_64/stone.index [100]
+ - volatile = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/volatile, arch=x86_64) [0]
+ - local = file:///home/live/.cache/local_repo/x86_64/stone.index [100]
 ```
 
 Behind the scenes, `boulder` builds and saves an appropriately named build profile to `~/.config/boulder/profile.d/`.
 
-This is what `local-x86_64.yaml` should look like after the above commands have been run successfully:
+This is what `local-x86_64.kdl` should look like after the above commands have been run successfully:
 
-```yaml
-local-x86_64:
-  repositories:
-    local:
-      description: ''
-      uri: file:///home/ermo/.cache/local_repo/x86_64/stone.index
-      priority: 100
-      active: true
-    volatile:
-      description: ''
-      uri: https://cdn.aerynos.dev/stream/volatile/x86_64/stone.index
-      priority: 0
-      active: true
+```kdl
+local-x86_64 {
+  repositories {
+    volatile {
+      description "AerynOS volatile stream (CDN)"
+      base-uri "https://cdn.aerynos.dev/"
+      channel "main"
+      version "stream/volatile"
+      arch "x86_64"
+      priority 0
+    }
+    local {
+      description "Local repository"
+      uri "file:///home/live/.cache/local_repo/x86_64/stone.index"
+      priority 100
+    }
+  }
+}
 ```
 
 
@@ -98,17 +104,18 @@ Listing and adding moss-format repositories containing stone.index files is done
 ```bash
 moss repo list
 # output
- - unstable = https://cdn.aerynos.dev/stream/unstable/x86_64/stone.index [0]
+ - unstable = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/unstable, arch=x86_64) [0]
 # add repositories
 # note: ${HOME} will be replaced by the actual home directory of the user
-#       invoking the command. In the example below, ${HOME} = /home/ermo"
-sudo moss repo add volatile https://cdn.aerynos.dev/stream/volatile/x86_64/stone.index -p 10
+#       invoking the command. In the example below, ${HOME} = /home/live"
+sudo moss repo add unstable https://cdn.aerynos.dev --root-index channel=main,version=stream/unstable -p 0
+sudo moss repo add volatile https://cdn.aerynos.dev --root-index channel=main,version=stream/volatile -p 10
 sudo moss repo add local file://${HOME}/.cache/local_repo/x86_64/stone.index -p 100
 moss repo list
 # output
- - unstable = https://cdn.aerynos.dev/stream/unstable/x86_64/stone.index [0]
- - volatile = https://cdn.aerynos.dev/stream/volatile/x86_64/stone.index [10]
- - local = file:///home/ermo/.cache/local_repo/x86_64/stone.index [100]
+ - unstable = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/unstable, arch=x86_64) [0]
+ - volatile = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/volatile, arch=x86_64) [10]
+ - local = file:///home/live/.cache/local_repo/x86_64/stone.index [100]
 ```
 
 
@@ -128,9 +135,9 @@ sudo moss repo disable volatile
 sudo moss repo disable local
 moss repo list
 # output
- - unstable = https://cdn.aerynos.dev/stream/unstable/x86_64/stone.index [0]
- - volatile = https://cdn.aerynos.dev/stream/volatile/x86_64/stone.index [10] (disabled)
- - local = file:///home/ermo/.cache/local_repo/x86_64/stone.index [100] (disabled)
+ - unstable = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/unstable, arch=x86_64) [0]
+ - volatile = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/volatile, arch=x86_64) [10] (disabled)
+ - local = file:///home/live/.cache/local_repo/x86_64/stone.index [100] (disabled)
 ```
 
 
@@ -145,9 +152,9 @@ sudo moss repo enable volatile
 sudo moss repo enable local
 moss repo list
 # output
- - unstable = https://cdn.aerynos.dev/stream/unstable/x86_64/stone.index [0]
- - volatile = https://cdn.aerynos.dev/stream/volatile/x86_64/stone.index [10]
- - local = file:///home/ermo/.cache/local_repo/x86_64/stone.index [100]
+ - unstable = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/unstable, arch=x86_64) [0]
+ - volatile-stream = (base-uri=https://cdn.aerynos.dev/, channel=main, version=stream/volatile, arch=x86_64) [10] (disabled)
+ - local-x86_64 = file:///home/live/.cache/local_repo/x86_64/stone.index [100] (disabled)
 ```
 
 
