@@ -59,7 +59,7 @@ default-x86_64:
 # note: ${HOME} will be replaced by the actual home directory of the user
 #       invoking the command. In the example below, ${HOME} = /home/ermo
 boulder profile add \
-  --repo name=volatile,base-uri=https://cdn.aerynos.dev,version=stream/unstable,priority=0 \
+  --repo name=volatile,base-uri=https://cdn.aerynos.dev,version=stream/volatile,priority=0 \
   --repo name=local,uri=file://${HOME}/.cache/local_repo/x86_64/stone.index,priority=100 \
   local-x86_64
 boulder profile list
