@@ -100,7 +100,7 @@ We have looked at how we can automate/simplify as much of our package update pro
     
 ## Package Building
 
-We currently have four builders dedicated to building official packages that land in our repositories. Our tooling has been developed so it can place smaller builds to our weaker machines and larger more complex builds are reserved for our more powerful builders. Any builds that require a chain of reverse dependency rebuilds are analysed before being sent to our builders so they are built in the correct order. 
+We currently have four permanent builders dedicated to building official packages that land in our repositories, and a few more temporary builders can be enabled during very large build queue processing. Our tooling has been developed so it can place smaller builds to our weaker machines, while larger, more complex builds are reserved for our more powerful builders. Build tasks are automatically analysed before being sent to our builders so they are built in the correct order.
 
 <div class="aspect-ratio">
   <iframe src="https://exquisite.tube/videos/embed/6Srz7zLoLgAnNvFBpv9LA6" width="1280" height="720" frameborder="0"></iframe>
