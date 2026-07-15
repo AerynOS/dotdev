@@ -1,18 +1,26 @@
 ---
 title: Philosophy
-lastUpdated: 2025-08-04T10:00:00Z
+lastUpdated: 2026-07-15T12:00:00Z
 description: The philosophy of AerynOS
 ---
 
 import { Aside } from '@astrojs/starlight/components';
 
+<Aside type="tip" title= "AerynOS Mission Statement">
+    Develop modern, ergonomic tooling and processes that in turn enable efficient delivery of an atomic, reliable, predictable, and performant Operating System, which is a joy to use and maintain for its developers, packagers, and users alike.
+</Aside>
+
+AerynOS is the collective output of brand new tooling and associated processes, engineered from the ground up to deliver a Linux distribution that focuses on reliability, up front predictability, proven performance and efficiency.
+
+Our ground up approach has enabled us to provide atomic updates without requiring reboots or having to utilize containers for package delivery. Part of our design philosophy is to deliver "just enough" flexibility and customizability to end users, without becoming a meta-distribution, and without compromising on predictability or reliability.
+
 ## Stateless (aka `hermetic /usr`)
 
 Most Linux distributions follow the [Filesystem Hierarchy Standard](https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf) which sets the structure for all files and directories on a Unix-like system. In traditional FHS based Linux distributions, package files can be installed to multiple directories, these can be directories or files that users may interact with (such as config files).
 
-In AerynOS, packages are forbidden from containing any files outside of /usr directory. The /usr directory exclusively belongs to the system with the user not intended to make any changes in this directory what-so-ever. Files written under the /usr directory by a user will get removed (or reverted) the next time the system is updated.
+In AerynOS, packages are forbidden from containing any files outside of the `/usr` directory. The /usr directory exclusively belongs to the system with the user not intended to make any changes in this directory what-so-ever. Files written under the /usr directory by a user will get removed (or reverted) the next time the system is updated.
 
-In order to enable this, some packages and/or configurations are altered in AerynOS to ensure they can operate in the absence of a user provided configuration. This forces AerynOS to have sane defaults baked in at all levels, and eliminates 3-way merge conflicts on package updates. There are no conflicts, because everything in /etc and /var belongs to the user.
+In order to enable this, some packages and/or configurations are altered in AerynOS to ensure they can operate in the absence of a user provided configuration. This forces AerynOS to have sane defaults baked in at all levels, and eliminates 3-way merge conflicts on package updates. There are no conflicts, because everything in `/etc` and `/var` belongs to the user.
 
 The stateless Linux concept was originally proposed by Red Hat in 2004 and the idea has continued to evolve from there. AerynOS leans towards the approach developed by Clear Linux, and we are refining it further.
 
@@ -30,15 +38,25 @@ System triggers do not run in an isolated container, but instead are run in the 
 
 An atomic update is a series of changes to a system that are treated as a single, indivisible operation. If any part of this update fails, then the entire update is canceled with all prior parts of the incomplete update being rolled back. This means that either an update completes fully as intended, or the system is left in the state it was in before the update was attempted. This is important because partial updates often cause significant issues such as bricked installs.
 
-AerynOS' approach to atomic updates is fairly different to the approach taken by other Linux distributions, which mostly use an A/B switch model using specific read-only filesystems to swap the whole system upon reboot. Atomic updates in AerynOS are managed by its package manager `moss` (which we also refer to as a `system state manager`). As such, AerynOS is not tied to using read-only filesystems and this allows for the use of XFS, ext4 and F2FS.
+AerynOS' approach to atomic updates is fairly different to the approach taken by other Linux distributions, which mostly use an A/B switch model using specific read-only filesystems to swap the whole system upon reboot. Atomic updates in AerynOS are managed by its package manager `moss` (which we also refer to as a `system state manager`). As such, AerynOS is not tied to using read-only filesystems and this allows for the use of XFS, ext4 and F2FS. In the future, additional filesystems will be tested and considered.
 
 As mentioned above, AerynOS utilizes a stateless design where packages can only be installed to the `/usr` directory. The knowledge that packages can only be installed to this directory allows AerynOS to innovate in its approach to atomic updates.
 
-AerynOS packages are packaged up as bespoke `.stone` moss-format files. Hence, AerynOS does not use or rely on e.g. Debian `.deb` format package files or Fedora/RHEL `.rpm` format package files. These `.stone` files contain a deduplicated set of hashed files compressed using zstd. When a `.stone` file is installed via `moss`, the files are decompressed and stored into a global, deduplicated content addressable store under`/.moss/`. Relevant metadata about these files is also stored in a database under `/.moss/`.
+AerynOS packages are packaged up as bespoke `.stone` moss-format files. Hence, AerynOS does not use or rely on e.g. Debian `.deb` format package files or Fedora/RHEL `.rpm` format package files. These `.stone` files contain a deduplicated set of hashed files compressed using zstd. 
 
-As part of the final stages of an atomic transaction, `moss` creates (or "blits") a new `/usr` directory based on [hardlinks](https://www.virtualcuriosities.com/articles/4507/how-hard-links-and-inodes-work-on-linux) to the global content addressable store. It then swaps this new `/usr` directory into place using the `renameat2` Linux kernel syscall with the `RENAME_EXCHANGE` flag, which allows for atomically exchanging an old path for a new path.
+### Content Addressable Store (CAS)
+
+When a `.stone` file is installed via `moss`, the files are decompressed and stored into a global, deduplicated content addressable store (CAS) under `/.moss/`. Relevant metadata about these files is also stored in a database under `/.moss/`. This CAS stores all files for all `.stone` packages installed on the system. 
+
+### Hardlinking
+
+As part of the final stages of an atomic transaction, `moss` creates (or "blits") a new `/usr` directory based on [hardlinks](https://www.virtualcuriosities.com/articles/4507/how-hard-links-and-inodes-work-on-linux) to the global content addressable store. It then swaps this new `/usr` directory into place using the `renameat2` Linux kernel syscall with the `RENAME_EXCHANGE` flag, which allows for atomically exchanging an old path for a new path. On modern NVMe drives, this atomic swap takes less than 1 second.
 
 As hardlinks do not take up any significant additional space on disk, and since the global content addressable store is always deduplicated as part of every transaction, `moss` stores every `/usr` directory from every transaction. This allows for retaining system snapshots with minimal overhead and provides the ability to perform atomic rollbacks to earlier states so long as the user does not prune those.
+
+## Bootloader
+
+Our BLS (Bootloader Specification) compliant boot management tool, `blsforme` adds additional functionality. This tool integrates with `moss` and provides the systemd-boot bootloader with the last 5 moss system states (the last 5 transactions' `/usr` directories) as loadable options at boot time. If for whatever reason, a user has an issue with the latest system state, at boot they can revert to any of the previous 4 states at their discretion. As stated above, on a modern NVMe drive, the atomic swap to a previous state takes less than a second.
 
 ## Self healing
 
@@ -57,3 +75,38 @@ In AerynOS, however, upon trying to boot into this last transaction, the system 
 ### Could this happen?
 
 Whilst it is unlikely that a user would ever knowingly delete these very important packages (though it could happen). The more likely scenario on traditional Linux distributions is that there is a partial update that may have deleted very important aspects for a functioning system with the newer versions not having been yet installed before the update stopped. By the design features mentioned above, this is impossible on AerynOS.
+
+## Repository Management 
+
+We have delivered on our concept of versioned repositories. We currently offer two repositories or "Update Streams":
+
+- The default "unstable" stream, and 
+- A testing "volatile" stream
+
+As a rolling release distribution, packages are landed in our volatile stream first for testing. After a period of time (usually every 1 to 2 weeks), we sync the state of the volatile stream to our unstable stream, so our wider user community gets to receive updated packages. Each stream update from volatile -> unstable has a corresponding addressable tag, which also acts as a snapshot in time that we can go back and test from.
+
+## System model
+
+By default, AerynOS operates as a standard "imperative" Linux Distribution. We have implemented the concept of an (optional!) install-time declarative system-model where a user can define (within the `/etc/moss/system-model.kdl` file), which exact packages and from which repository they want these packages.
+
+`Moss` will then keep the system in sync with this system-model as updates arrive. Combining the use of addressable tags, our system-model approach goes further and enables users to define a specific tag on our unstable repository, becoming more akin to a fixed point release model. The user can change the tag they wish to fix to, or revert back to the rolling release model at any time. This flexibility enables users to replicate their system-model across different installs and share system-models with the AerynOS team for troubleshooting purposes.
+
+## Package Management 
+
+We have looked at how we can automate/simplify as much of our package update process as possible to reduce the mental burden for our packagers. A few examples include:
+
+- When looking to create a new installable package (not currently in our repository), we have a command that will look at the package source file and automatically create the recipe template, completing it with as much information as it can based on the contents of the source file. This reduces the work the packager has to complete the recipe before it can be used to create an installable package.
+- When updating an existing package recipe, we have a command that will attempt to automatically find if there is a new release available and update the recipe with the new version details. Once this update has been accepted and saved by the packager, the packager simply needs to run the build and test that the package works as expected.
+    
+## Package Building
+
+We currently have four permanent builders dedicated to building official packages that land in our repositories, and a few more temporary builders can be enabled during very large build queue processing. Our tooling has been developed so it can place smaller builds to our weaker machines, while larger, more complex builds are reserved for our more powerful builders. Build tasks are automatically analysed before being sent to our builders so they are built in the correct order.
+
+<div class="aspect-ratio">
+  <iframe src="https://exquisite.tube/videos/embed/6Srz7zLoLgAnNvFBpv9LA6" width="1280" height="720" frameborder="0"></iframe>
+</div>
+
+
+By way of example, the video above shows KDE Plasma 6.6 being built. We sent 56 packages for build and our infra was able to sort the build order, schedule them to our builders and land the full stack upgrade to our volatile repository in under an hour.
+
+The whole infra code base has been designed to be flexible, allowing additional builders to be added as required with no real upper limit. Eventually, we envisage productizing our infra tooling, such that users (or downstream distributions/companies) could create their own builder infrastructure to source build their own repositories as they see fit.
