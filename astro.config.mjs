@@ -195,7 +195,15 @@ export default defineConfig({
             },
             {
               label: "Macros",
-              autogenerate: { directory: "Packaging/Macros" },
+              items: [
+                { slug: "packaging/macros/autotools" },
+                { slug: "packaging/macros/cargo" },
+                { slug: "packaging/macros/cmake" },
+                { slug: "packaging/macros/meson" },
+                { slug: "packaging/macros/misc" },
+                { slug: "packaging/macros/perl" },
+                { slug: "packaging/macros/python" },
+              ],
             },
           ],
         },
